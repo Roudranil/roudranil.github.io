@@ -73,6 +73,21 @@
     }
 
     .prose {
+        --tw-prose-body: var(--catppuccin-color-text);
+        --tw-prose-headings: var(--catppuccin-color-rosewater);
+        --tw-prose-bold: var(--catppuccin-color-text);
+        --tw-prose-code: var(--catppuccin-color-lavender);
+        --tw-prose-links: var(--catppuccin-color-sapphire);
+        --tw-prose-counters: var(--catppuccin-color-overlay1);
+        --tw-prose-bullets: var(--catppuccin-color-overlay1);
+        --tw-prose-quotes: var(--catppuccin-color-subtext0);
+        --tw-prose-quote-borders: var(--catppuccin-color-surface1);
+        --tw-prose-captions: var(--catppuccin-color-subtext0);
+        --tw-prose-th-borders: var(--catppuccin-color-surface0);
+        --tw-prose-td-borders: var(--catppuccin-color-surface0);
+        --tw-prose-pre-bg: var(--catppuccin-color-mantle);
+        --tw-prose-pre-code: var(--catppuccin-color-text);
+        --tw-prose-hr: var(--catppuccin-color-surface1);
         @apply prose-p:text-base prose-p:text-justify prose-li:text-base prose-ul:leading-tight prose-pre:max-w-sm sm:prose-pre:max-w-4xl;
     }
 
@@ -104,18 +119,15 @@
 
     .prose h1 {
         font-size: 36px;
-        color: #f5e0dc;
     }
 
     .prose h2 {
         margin-top: 32px;
         font-size: 30px;
-        color: #f5e0dc;
     }
 
     .prose h3 {
         font-size: 24px;
-        color: #f5e0dc;
     }
 
     .prose p {
