@@ -10,7 +10,15 @@ Standard workflow for changes/fixes/improvements:
 
 1. Create a feature branch from `main`
 2. Make changes, commit atomically (see Commits section)
-3. Push branch and report back
+3. Push branch
+4. Generate `.pr.md` at repo root with PR title and body (following §9 of git-commit skill)
+5. Report back
+
+### Before every commit
+
+1. Read the `git-commit` skill (`.claude/skills/git-commit/SKILL.md`)
+2. Run through the pre-commit checklist (§10 of the skill)
+3. Use the HEREDOC template for the commit message
 
 ## Commands
 
