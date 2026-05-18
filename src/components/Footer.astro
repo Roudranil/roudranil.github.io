@@ -5,6 +5,7 @@ import Socials from "./Socials.astro";
 <footer class="mt-auto">
     <div class="footer-wrapper">
         <Socials centered />
+        <span class="powered-by">Powered by <a href="https://astro.build/">Astro</a></span>
     </div>
 </footer>
 
@@ -15,6 +16,10 @@ import Socials from "./Socials.astro";
     }
 
     .footer-wrapper {
-        @apply mt-[128px] flex items-center justify-center py-6 sm:py-4;
+        @apply mt-[128px] flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4;
+    }
+
+    .powered-by {
+        @apply my-2 text-xs text-ctp-peach;
     }
 </style>
