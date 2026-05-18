@@ -79,7 +79,7 @@
     .prose a {
         color: #74c7ec;
         font-style: italic;
-        font-size: 17px;
+        font-size: 0.8em;
         font-weight: 600;
         text-decoration-line: none;
         text-underline-offset: 5px;
