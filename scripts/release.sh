@@ -120,7 +120,8 @@ if [[ $dry_run -eq 1 ]]; then
   echo "[dry-run] would merge dev into main (--no-ff)"
   echo "[dry-run] would tag: ${tag}"
   echo "[dry-run] would push main + tag to origin"
-  echo "[dry-run] would checkout dev"
+  echo "[dry-run] would merge main back into dev"
+  echo "[dry-run] would push dev to origin"
   exit 0
 fi
 
@@ -157,8 +158,11 @@ git -C "$REPO_ROOT" push origin "$tag"
 echo "  pushed main + ${tag} → origin ✓"
 
 # ---------------------------------------------------------------------------
-# Return to dev
+# Merge main back into dev
 # ---------------------------------------------------------------------------
 git -C "$REPO_ROOT" checkout dev
+git -C "$REPO_ROOT" merge main --no-edit
+git -C "$REPO_ROOT" push origin dev
+echo "  merged main back into dev ✓"
 echo ""
 echo "Release ${tag} complete. Deploy will trigger automatically."
