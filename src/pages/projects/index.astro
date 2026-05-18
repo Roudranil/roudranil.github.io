@@ -36,7 +36,7 @@ projects.sort((a, b) => (b.data.date as any) - (a.data.date as any));
                         <Card
                             title={project.data.title}
                             date={project.data.date}
-                            url={`/projects/${project.slug}` || "#"}
+                            url={`/projects/${project.id}`}
                         />
                     ))
                 }

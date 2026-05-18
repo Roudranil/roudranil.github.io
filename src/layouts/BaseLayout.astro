@@ -2,7 +2,7 @@
 import { SITE } from "@config";
 import "@styles/base.css";
 import Footer from "@components/Footer.astro";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -89,7 +89,7 @@ const {
             gtag("config", "G-REHV5RW6LZ");
         </script>
 
-        <ViewTransitions />
+        <ClientRouter />
     </head>
     <body>
         <slot />
@@ -98,8 +98,9 @@ const {
         >
         <Footer />
         <style>
+    @reference "@styles/base.css";
             #scrolltotop {
-                @apply fixed bottom-5 right-7 z-[99] hidden h-16 cursor-pointer rounded-2xl border border-none bg-ctp-surface1 p-2 text-xl text-ctp-red opacity-75 outline-none transition duration-200 hover:bg-ctp-surface0 hover:text-ctp-sapphire sm:text-4xl;
+                @apply fixed bottom-5 right-7 z-[99] hidden h-16 cursor-pointer rounded-2xl border border-none bg-ctp-surface1 p-2 text-xl text-ctp-red opacity-75 outline-hidden transition duration-200 hover:bg-ctp-surface0 hover:text-ctp-sapphire sm:text-4xl;
             }
         </style>
 
