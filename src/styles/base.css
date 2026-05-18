@@ -119,13 +119,6 @@
         line-height: 1.5;
     }
 
-    .prose code::before {
-        content: "";
-    }
-
-    .prose code::after {
-        content: "";
-    }
 
     .prose pre {
         border-width: 2px;
@@ -185,7 +178,12 @@
     }
 }
 
-/* Prose typography overrides — must be outside @layer to win over plugin */
+/* Prose overrides — must be outside @layer to win over plugin cascade */
+.prose code::before,
+.prose code::after {
+    content: "";
+}
+
 .prose {
     --tw-prose-body: var(--catppuccin-color-text);
     --tw-prose-headings: var(--catppuccin-color-rosewater);
