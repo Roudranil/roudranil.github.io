@@ -1,28 +1,22 @@
 import { defineConfig } from "astro/config";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import remarkCodeTitles from "remark-code-titles";
+import tailwindcss from "@tailwindcss/vite";
 
-import tailwind from "@astrojs/tailwind";
-import catppuccinMocha from "./catppuccin-mocha.json";
 import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
-
 import sitemap from "@astrojs/sitemap";
 
-// https://astro.build/config
 export default defineConfig({
     site: "https://roudranil.github.io",
-    // base: "/roudranil.github.io",
     markdown: {
-        remarkPlugins: [remarkMath, remarkCodeTitles],
+        remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
         shikiConfig: {
-            theme: catppuccinMocha,
+            theme: "catppuccin-mocha",
         },
     },
     integrations: [
-        tailwind(),
         mdx(),
         sitemap(),
         partytown({
@@ -31,4 +25,7 @@ export default defineConfig({
             },
         }),
     ],
+    vite: {
+        plugins: [tailwindcss()],
+    },
 });
