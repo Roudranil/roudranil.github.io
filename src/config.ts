@@ -35,7 +35,7 @@ export const MENU: MenuItem[] = [
 export const SOCIALS: SocialObjects = [
     {
         name: "Mail",
-        href: "mailto:roudranil@cmi.ac.in",
+        href: "mailto:dasroudranil@gmail.com",
         linkTitle: `Send me a mail!`,
         active: true,
     },

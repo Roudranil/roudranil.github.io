@@ -45,3 +45,9 @@ jobs:
               run: |
                   git push origin main
                   git push origin "v${{ steps.version.outputs.version }}"
+
+            - name: Merge main back into dev
+              run: |
+                  git checkout dev
+                  git merge main --no-edit
+                  git push origin dev

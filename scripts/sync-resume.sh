@@ -14,9 +14,9 @@ git clone https://github.com/Roudranil/resume.git public/resume
 cd public/resume
 
 # Remove everything except the PDF of the resume
-cp resumev2/resume.pdf roudranil-resume.pdf
+cp resumev3/resume.pdf resume.pdf
 find . -type f ! -name "*.pdf" -exec rm -f {} +
 
 # Remove the .git directory
-rm -r resumev2
+rm -r resumev3
 rm -r .git
