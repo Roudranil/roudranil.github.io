@@ -1,94 +1,210 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "@catppuccin/tailwindcss/mocha.css";
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --font-sans: "ComputerModernSans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+    --font-serif: "ComputerModernRoman", ui-serif, Georgia, Cambria,
+        "Times New Roman", Times, serif;
+    --font-mono: "VictorMonoNerdFont", ui-monospace, SFMono-Regular, Menlo,
+        Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --font-size-xs: 12px;
+    --font-size-sm: 16px;
+    --font-size-mono: 17px;
+    --font-size-base: 20px;
+    --font-size-lg: 24px;
+    --font-size-xl: 30px;
+    --font-size-2xl: 36px;
+    --font-size-3xl: 48px;
+    --font-size-4xl: 60px;
+    --font-size-5xl: 72px;
+    --font-size-6xl: 84px;
+    --font-size-7xl: 96px;
+    --font-size-8xl: 108px;
+    --font-size-9xl: 128px;
+
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+    --breakpoint-mywidth: 1023px;
+
+    --color-dark-rosewater: #e4ada2;
+    --color-light-rosewater: #faf0ee;
+    --color-medium-rosewater: #e0a094;
+    --color-dark-sapphire: #1e9fd9;
+    --color-darker-rosewater: #a6a3b1;
+    --color-light-base: #404063;
+    --color-info-titletext: #0d455d;
+    --color-info-bg: #74c7ec;
+    --color-info-accent: #209fb5;
+    --color-alert-titletext: #600a22;
+    --color-alert-bg: #f38ba8;
+    --color-alert-accent: #d20f39;
+    --color-tip-titletext: #5c0e47;
+    --color-tip-bg: #ea76cb;
+    --color-tip-accent: #991776;
+}
 
 @layer base {
     :root,
     body {
-        @apply
-        /* font */
-        font-sans
-         /* Colors */
-        bg-ctp-base /* background color */ 
-        text-ctp-text /* text color */
-
-        /* sizes */
-        /*  makes the screen size limited to 896 px */
-        max-w-5xl
-        min-h-screen
-        mywidth:w-[1024px]
-        /* this basically center aligns everything in the website */
-        mx-auto
-        flex
-        flex-col
+        @apply font-sans bg-ctp-base text-ctp-text max-w-5xl min-h-screen mywidth:w-5xl mx-auto flex flex-col;
     }
-/* 
-    main {
-        @apply mt-[80px]
-    } */
 
     svg.socialiconsvg {
         @apply fill-current stroke-current h-[1.5em];
     }
 
     a {
-        @apply font-mono
+        @apply font-mono;
     }
 
     p {
-        @apply text-base
+        @apply text-base;
     }
 
     .page-title {
-        @apply font-bold text-2xl text-ctp-rosewater my-[32px]
+        @apply font-bold text-2xl text-ctp-rosewater my-8;
     }
 
     .prose {
-        @apply
-
-        prose-p:text-base
-        prose-p:text-justify
-
-        prose-li:text-base
-        prose-ul:leading-tight
-
-        /* prose-code:bg-ctp-surface0 */
-        /* prose-code:border prose-code:rounded-md prose-code:border-ctp-surface0 prose-code:px-2 */
-        prose-pre:max-w-sm sm:prose-pre:max-w-4xl
+        @apply prose-p:text-base prose-p:text-justify prose-li:text-base prose-ul:leading-tight prose-pre:max-w-sm sm:prose-pre:max-w-4xl;
     }
 
-    /* ===== scrollbar ===== */
+    .prose a {
+        color: #74c7ec;
+        font-style: italic;
+        font-size: 17px;
+        font-weight: 600;
+        text-decoration-line: none;
+        text-underline-offset: 5px;
+        background-position: left bottom;
+        background-image: linear-gradient(
+            to right,
+            rgb(116, 199, 236),
+            rgb(30, 159, 217) 100%
+        );
+        background-repeat: no-repeat;
+        background-size: 0% 3px;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+        transition-duration: 75ms;
+    }
+
+    .prose a:hover {
+        color: rgb(30, 159, 217);
+        text-decoration-line: none;
+        background-size: 100% 2px;
+    }
+
+    .prose h1 {
+        font-size: 36px;
+    }
+
+    .prose h2 {
+        margin-top: 32px;
+        font-size: 30px;
+    }
+
+    .prose h3 {
+        font-size: 24px;
+    }
+
+    .prose p {
+        line-height: 1.5;
+    }
+
+    .prose code::before {
+        content: "";
+    }
+
+    .prose code::after {
+        content: "";
+    }
+
+    .prose pre {
+        border-width: 2px;
+        border-color: #313244;
+        border-radius: 1rem;
+        margin-top: 0;
+    }
+
+    .prose pre::-webkit-scrollbar {
+        width: 0;
+    }
+
+    .prose table {
+        margin: auto;
+        border-collapse: collapse;
+        width: auto;
+    }
+
+    .prose :is(th, td) {
+        padding: 8px 12px;
+        text-align: center;
+        border-right-width: 1px;
+        border-right-color: #313244;
+        border-bottom-width: 1px;
+        border-bottom-color: #313244;
+    }
+
+    .prose :is(th:last-child, td:last-child) {
+        border-right: none;
+    }
+
+    .prose :is(tr:last-child th, tr:last-child td) {
+        border-bottom: none;
+    }
+
+    .prose li {
+        margin-bottom: 0;
+        margin-top: 8px;
+        word-wrap: break-word;
+        line-height: 1.5;
+    }
+
     html {
         overflow-y: scroll;
     }
 
-    /* width */
     ::-webkit-scrollbar {
         @apply w-3;
     }
 
-    /* Track */
     ::-webkit-scrollbar-track {
         @apply bg-ctp-base;
     }
 
-    /* Handle */
     ::-webkit-scrollbar-thumb {
         @apply bg-ctp-surface0 hover:bg-ctp-surface1 transition duration-100;
     }
 }
 
+/* Prose typography overrides — must be outside @layer to win over plugin */
+.prose {
+    --tw-prose-body: var(--catppuccin-color-text);
+    --tw-prose-headings: var(--catppuccin-color-rosewater);
+    --tw-prose-bold: var(--catppuccin-color-text);
+    --tw-prose-code: var(--catppuccin-color-lavender);
+    --tw-prose-links: var(--catppuccin-color-sapphire);
+    --tw-prose-counters: var(--catppuccin-color-overlay1);
+    --tw-prose-bullets: var(--catppuccin-color-overlay1);
+    --tw-prose-quotes: var(--catppuccin-color-subtext0);
+    --tw-prose-quote-borders: var(--catppuccin-color-surface1);
+    --tw-prose-captions: var(--catppuccin-color-subtext0);
+    --tw-prose-th-borders: var(--catppuccin-color-surface0);
+    --tw-prose-td-borders: var(--catppuccin-color-surface0);
+    --tw-prose-pre-bg: var(--catppuccin-color-mantle);
+    --tw-prose-pre-code: var(--catppuccin-color-text);
+    --tw-prose-hr: var(--catppuccin-color-surface1);
+}
+
 /* Fonts */
-/* 
-$$$$$$\  $$\      $$\        $$$$$$\                      $$\  $$$$$$\  
-$$  __$$\ $$$\    $$$ |      $$  __$$\                     \__|$$  __$$\ 
-$$ /  \__|$$$$\  $$$$ |      $$ /  \__| $$$$$$\   $$$$$$\  $$\ $$ /  \__|
-$$ |      $$\$$\$$ $$ |      \$$$$$$\  $$  __$$\ $$  __$$\ $$ |$$$$\     
-$$ |      $$ \$$$  $$ |       \____$$\ $$$$$$$$ |$$ |  \__|$$ |$$  _|    
-$$ |  $$\ $$ |\$  /$$ |      $$\   $$ |$$   ____|$$ |      $$ |$$ |      
-\$$$$$$  |$$ | \_/ $$ |      \$$$$$$  |\$$$$$$$\ $$ |      $$ |$$ |      
- \______/ \__|     \__|       \______/  \_______|\__|      \__|\__|      
-*/
 
 @font-face {
     font-family: "ComputerModernRoman";
@@ -118,16 +234,6 @@ $$ |  $$\ $$ |\$  /$$ |      $$\   $$ |$$   ____|$$ |      $$ |$$ |
     src: url("/fonts/cm/cm-serif-bolditalic.ttf") format("truetype");
 }
 
-/* 
-$$$$$$\  $$\      $$\        $$$$$$\                                       $$$$$$\                      $$\  $$$$$$\  
-$$  __$$\ $$$\    $$$ |      $$  __$$\                                     $$  __$$\                     \__|$$  __$$\ 
-$$ /  \__|$$$$\  $$$$ |      $$ /  \__| $$$$$$\  $$$$$$$\   $$$$$$$\       $$ /  \__| $$$$$$\   $$$$$$\  $$\ $$ /  \__|
-$$ |      $$\$$\$$ $$ |      \$$$$$$\   \____$$\ $$  __$$\ $$  _____|      \$$$$$$\  $$  __$$\ $$  __$$\ $$ |$$$$\     
-$$ |      $$ \$$$  $$ |       \____$$\  $$$$$$$ |$$ |  $$ |\$$$$$$\         \____$$\ $$$$$$$$ |$$ |  \__|$$ |$$  _|    
-$$ |  $$\ $$ |\$  /$$ |      $$\   $$ |$$  __$$ |$$ |  $$ | \____$$\       $$\   $$ |$$   ____|$$ |      $$ |$$ |      
-\$$$$$$  |$$ | \_/ $$ |      \$$$$$$  |\$$$$$$$ |$$ |  $$ |$$$$$$$  |      \$$$$$$  |\$$$$$$$\ $$ |      $$ |$$ |      
- \______/ \__|     \__|       \______/  \_______|\__|  \__|\_______/        \______/  \_______|\__|      \__|\__|       */
-
 @font-face {
     font-family: "ComputerModernSans";
     font-style: normal;
@@ -155,17 +261,6 @@ $$ |  $$\ $$ |\$  /$$ |      $$\   $$ |$$  __$$ |$$ |  $$ | \____$$\       $$\  
     font-weight: bold;
     src: url("/fonts/cm/cm-sf-bolditalic.ttf") format("truetype");
 }
-
-/* 
- $$$$$$\  $$\      $$\       $$$$$$$$\ $$$$$$$$\ 
-$$  __$$\ $$$\    $$$ |      \__$$  __|\__$$  __|
-$$ /  \__|$$$$\  $$$$ |         $$ |      $$ |   
-$$ |      $$\$$\$$ $$ |         $$ |      $$ |   
-$$ |      $$ \$$$  $$ |         $$ |      $$ |   
-$$ |  $$\ $$ |\$  /$$ |         $$ |      $$ |   
-\$$$$$$  |$$ | \_/ $$ |         $$ |      $$ |   
- \______/ \__|     \__|         \__|      \__|   
- */
 
 @font-face {
     font-family: "ComputerModernTypewriter";
@@ -195,60 +290,50 @@ $$ |  $$\ $$ |\$  /$$ |         $$ |      $$ |
     src: url("/fonts/cm/cm-tt-bolditalic.ttf") format("truetype");
 }
 
-/* 
-/$$    /$$ /$$             /$$                         /$$      /$$                              
-| $$   | $$|__/            | $$                        | $$$    /$$$                              
-| $$   | $$ /$$  /$$$$$$$ /$$$$$$    /$$$$$$   /$$$$$$ | $$$$  /$$$$  /$$$$$$  /$$$$$$$   /$$$$$$ 
-|  $$ / $$/| $$ /$$_____/|_  $$_/   /$$__  $$ /$$__  $$| $$ $$/$$ $$ /$$__  $$| $$__  $$ /$$__  $$
- \  $$ $$/ | $$| $$        | $$    | $$  \ $$| $$  \__/| $$  $$$| $$| $$  \ $$| $$  \ $$| $$  \ $$
-  \  $$$/  | $$| $$        | $$ /$$| $$  | $$| $$      | $$\  $ | $$| $$  | $$| $$  | $$| $$  | $$
-   \  $/   | $$|  $$$$$$$  |  $$$$/|  $$$$$$/| $$      | $$ \/  | $$|  $$$$$$/| $$  | $$|  $$$$$$/
-    \_/    |__/ \_______/   \___/   \______/ |__/      |__/     |__/ \______/ |__/  |__/ \______/  */
-
 @font-face {
-    font-family: 'VictorMonoNerdFont';
+    font-family: "VictorMonoNerdFont";
     font-style: normal;
     font-weight: normal;
     font-display: swap;
-    src: url('/fonts/VictorMonoNerdFont-Regular.ttf') format('truetype');
+    src: url("/fonts/VictorMonoNerdFont-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'VictorMonoNerdFont';
+    font-family: "VictorMonoNerdFont";
     font-style: italic;
     font-weight: normal;
     font-display: swap;
-    src: url('/fonts/VictorMonoNerdFont-Italic.ttf') format('truetype');
+    src: url("/fonts/VictorMonoNerdFont-Italic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'VictorMonoNerdFont';
+    font-family: "VictorMonoNerdFont";
     font-style: normal;
     font-weight: bold;
     font-display: swap;
-    src: url('/fonts/VictorMonoNerdFont-Bold.ttf') format('truetype');
+    src: url("/fonts/VictorMonoNerdFont-Bold.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'VictorMonoNerdFontMono';
+    font-family: "VictorMonoNerdFontMono";
     font-style: normal;
     font-weight: normal;
     font-display: swap;
-    src: url('/fonts/VictorMonoNerdFontMono-Regular.ttf') format('truetype');
+    src: url("/fonts/VictorMonoNerdFontMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'VictorMonoNerdFontMono';
+    font-family: "VictorMonoNerdFontMono";
     font-style: italic;
     font-weight: normal;
     font-display: swap;
-    src: url('/fonts/VictorMonoNerdFontMono-Italic.ttf') format('truetype');
+    src: url("/fonts/VictorMonoNerdFontMono-Italic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'VictorMonoNerdFontMono';
+    font-family: "VictorMonoNerdFontMono";
     font-style: normal;
     font-weight: bold;
     font-display: swap;
-    src: url('/fonts/VictorMonoNerdFontMono-Bold.ttf') format('truetype');
+    src: url("/fonts/VictorMonoNerdFontMono-Bold.ttf") format("truetype");
 }
