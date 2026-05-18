@@ -8,7 +8,6 @@ Hey there! <code class="text-dark-rosewater text-lg">󱠢</code>. Thanks for dro
 
 ### Email
 
-- [roudranil@cmi.ac.in](mailto:roudranil@cmi.ac.in "roudranil@cmi.ac.in")
 - [dasroudranil@gmail.com](mailto:dasroudranil@gmail.com "dasroudranil@gmail.com")
 
 ### Socials

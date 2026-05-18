@@ -1,16 +1,11 @@
 ---
 import Socials from "./Socials.astro";
-const currentYear = new Date().getFullYear();
 ---
 
 <footer class="mt-auto">
     <div class="footer-wrapper">
         <Socials centered />
-        <div class="copyright-wrapper">
-            <span>Copyright &#169; {currentYear} Roudranil Das</span>
-            <span class="separator">&nbsp;|&nbsp;</span>
-            <span>Powered by <a href="https://astro.build/">Astro</a></span>
-        </div>
+        <span class="powered-by">Powered by <a href="https://astro.build/">Astro</a></span>
     </div>
 </footer>
 
@@ -24,11 +19,7 @@ const currentYear = new Date().getFullYear();
         @apply mt-[128px] flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4;
     }
 
-    .copyright-wrapper {
-        @apply my-2 flex flex-col items-center whitespace-nowrap text-xs text-ctp-peach sm:flex-row;
-    }
-
-    .separator {
-        @apply hidden sm:inline;
+    .powered-by {
+        @apply my-2 text-xs text-ctp-peach;
     }
 </style>
