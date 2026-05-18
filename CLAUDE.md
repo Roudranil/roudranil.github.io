@@ -4,11 +4,19 @@
 
 Personal portfolio site for Roudranil Das. Built with Astro 6, Tailwind CSS 4, deployed to GitHub Pages.
 
+## Branching Strategy
+
+- `main` — production; deploys automatically on push (GitHub Pages)
+- `dev` — integration branch; all feature work merges here
+- Feature branches — branch off `dev`, merge back into `dev`
+- Releases — manual merge from `dev` → `main` via `scripts/release.sh` or GitHub Actions workflow_dispatch
+- No direct commits to `main`
+
 ## Working Procedure
 
 Standard workflow for changes/fixes/improvements:
 
-1. Create a feature branch from `main`
+1. Create a feature branch from `dev`
 2. Make changes, commit atomically (see Commits section)
 3. Push branch
 4. Generate/update `.pr.md` at repo root with PR title and body (following §9 of git-commit skill)

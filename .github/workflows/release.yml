@@ -1,0 +1,47 @@
+name: Release (dev → main)
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build
+              run: npm run build
+
+            - name: Read version
+              id: version
+              run: echo "version=$(cat version)" >> "$GITHUB_OUTPUT"
+
+            - name: Merge dev into main
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git checkout main
+                  git merge origin/dev --no-ff -m "release: v${{ steps.version.outputs.version }}"
+
+            - name: Tag release
+              run: |
+                  git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+
+            - name: Push main + tag
+              run: |
+                  git push origin main
+                  git push origin "v${{ steps.version.outputs.version }}"
