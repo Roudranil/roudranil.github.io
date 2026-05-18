@@ -179,7 +179,7 @@
 }
 
 .prose a:hover {
-    color: rgb(30, 159, 217);
+    color: #74c7ec;
     text-decoration-line: none;
     background-size: 100% 2px;
 }
