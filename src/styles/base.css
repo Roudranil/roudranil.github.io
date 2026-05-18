@@ -53,7 +53,7 @@
 @layer base {
     :root,
     body {
-        @apply font-sans bg-ctp-base text-ctp-text max-w-5xl min-h-screen mywidth:w-[1024px] mx-auto flex flex-col;
+        @apply font-sans bg-ctp-base text-ctp-text max-w-5xl min-h-screen mywidth:w-5xl mx-auto flex flex-col;
     }
 
     svg.socialiconsvg {
@@ -69,7 +69,7 @@
     }
 
     .page-title {
-        @apply font-bold text-2xl text-ctp-rosewater my-[32px];
+        @apply font-bold text-2xl text-ctp-rosewater my-8;
     }
 
     .prose {
