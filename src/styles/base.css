@@ -61,7 +61,7 @@
     }
 
     a {
-        @apply font-mono;
+        @apply font-mono text-[0.85em];
     }
 
     p {
