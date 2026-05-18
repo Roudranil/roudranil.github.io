@@ -11,7 +11,8 @@ Standard workflow for changes/fixes/improvements:
 1. Create a feature branch from `main`
 2. Make changes, commit atomically (see Commits section)
 3. Push branch
-4. Generate `.pr.md` at repo root with PR title and body (following §9 of git-commit skill)
+4. Generate/update `.pr.md` at repo root with PR title and body (following §9 of git-commit skill)
+   - If `.pr.md` already exists and the branch is not yet merged, update it to reflect new commits
 5. Report back
 
 ### Before every commit
