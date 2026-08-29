@@ -20,6 +20,18 @@
 
 If you add new `.prose` overrides and they aren't taking effect, check whether they landed inside `@layer base` by mistake.
 
+## Code block styling (Expressive Code)
+
+Code fences render through `rehype-expressive-code`, not Astro's built-in Shiki — see `docs/build-and-deploy.md` for the pipeline wiring. The rendered markup is `div.expressive-code > figure.frame > figcaption.header + pre`, replacing what used to be a bare `.prose pre`:
+
+- `base.css`'s `.prose pre` rule now only sets `margin-top: 0` — border/radius/background are owned by Expressive Code's `styleOverrides` (`astro.config.mjs`) instead of Tailwind Typography's `.prose pre`. Don't re-add border/radius rules to `.prose pre`; edit `styleOverrides` in `astro.config.mjs` instead.
+- The `--tw-prose-pre-bg` / `--tw-prose-pre-code` CSS-variable overrides were removed from the `.prose` block (`base.css`) for the same reason — Expressive Code's own theme background/foreground on `<pre>` takes precedence regardless, so keeping them was misleading dead code.
+- `.prose pre::-webkit-scrollbar` became `.expressive-code pre::-webkit-scrollbar` — the scrollbar-hiding rule now targets Expressive Code's inner `<pre>` specifically, since `.prose pre` selectors reach *any* `<pre>` inside prose content, not just code-block ones.
+- `.expressive-code .header` is forced `position: relative`, and `.expressive-code .ec-lang-badge` is absolutely centered (`inset-inline-start: 50%; top: 50%; transform: translate(-50%, -50%)`) inside it. This decouples the language icon+name badge from Expressive Code's own filename-tab flex layout — without this, the badge would render inline next to a filename tab and get visually squeezed by the tab's own padding/background. The badge always uses `font-family: "VictorMonoNerdFont"` directly (not `var(--font-mono)`) because the nerd-font icon glyphs live in the private-use-area codepoints of that specific font file, and `var(--font-mono)`'s fallback chain wouldn't guarantee the same font resolves for the icon span.
+- `.expressive-code .copy button` gets `opacity: 0.75 !important` — Expressive Code's default copy button is hover-only (`opacity: 0` until the frame is hovered/focused); this override makes it always visible, matching this site's "always show the copy button" design choice rather than Expressive Code's editor-hover-affordance default.
+
+See `docs/quirks.md` for two non-obvious gotchas in this area: dev-server restarts and nerd-font codepoint entry.
+
 ## Fonts
 
 All fonts are self-hosted via `@font-face` in `base.css:207-337`:

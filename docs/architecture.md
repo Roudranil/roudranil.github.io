@@ -9,7 +9,7 @@
 ├── public/
 │   ├── fonts/           # self-hosted fonts (Computer Modern, Victor Mono)
 │   ├── resume/          # resume.pdf, synced from external repo
-│   └── styles/          # katex-custom.css, loadfonts.css, remark-styles.css, miscellaneous-styles.css
+│   └── styles/          # katex-custom.css, loadfonts.css, miscellaneous-styles.css
 ├── scripts/             # create.sh, sync-resume.sh
 ├── src/
 │   ├── assets/          # social icon SVGs
@@ -18,6 +18,7 @@
 │   ├── content.config.ts  # Zod schemas + glob() loaders (repo root of src, not src/content/)
 │   ├── layouts/         # BaseLayout, PostLayout, AboutLayout, ContactLayout
 │   ├── pages/           # file-based routing, incl. about.md/contact.md (plain pages)
+│   ├── plugins/         # expressive-code-language-badge.mjs — custom rehype-expressive-code plugin
 │   ├── styles/base.css  # Tailwind + theme + prose overrides
 │   ├── utils/utils.ts    # buildTOC (nests headings + computes tree(1)-style prefixes)
 │   ├── config.ts        # SITE, MENU, SOCIALS
