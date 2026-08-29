@@ -77,19 +77,6 @@
     }
 
 
-    .prose h1 {
-        font-size: 36px;
-    }
-
-    .prose h2 {
-        margin-top: 32px;
-        font-size: 30px;
-    }
-
-    .prose h3 {
-        font-size: 24px;
-    }
-
     .prose p {
         line-height: 1.5;
     }
@@ -183,7 +170,6 @@
 
 .prose {
     --tw-prose-body: var(--catppuccin-color-text);
-    --tw-prose-headings: var(--catppuccin-color-rosewater);
     --tw-prose-bold: var(--catppuccin-color-text);
     --tw-prose-code: var(--catppuccin-color-lavender);
     --tw-prose-links: var(--catppuccin-color-sapphire);
@@ -195,6 +181,21 @@
     --tw-prose-th-borders: var(--catppuccin-color-surface0);
     --tw-prose-td-borders: var(--catppuccin-color-surface0);
     --tw-prose-hr: var(--catppuccin-color-surface1);
+}
+
+.prose h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--catppuccin-color-maroon);
+}
+
+.prose h2 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-dark-rosewater);
+}
+
+.prose h3 {
+    font-size: var(--font-size-lg);
+    color: var(--catppuccin-color-rosewater);
 }
 
 .expressive-code .header {
