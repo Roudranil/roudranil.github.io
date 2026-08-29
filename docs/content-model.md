@@ -13,6 +13,7 @@ const baseSchema = z.object({
     activeNav: z.enum(["~", "about", "projects", "posts", "contact"]),
     shortTitle: z.string().optional(),
     headings: z.array(z.object({ depth: z.number(), slug: z.string(), text: z.string() })).optional(),
+    ai_use: z.array(z.enum(["gpt", "claude", "gemini", "grok", "qwen", "deepseek"])).optional(),
 });
 
 postsCollection    = baseSchema                                  // glob: src/content/posts/**/*.{md,mdx}
@@ -30,6 +31,7 @@ nav entry no longer exist.
 - `github` on `projects` is a plain string, not URL-validated.
 - `activeNav` must match one of `~`/`about`/`projects`/`posts`/`contact` — this couples directly to `MENU` in `src/config.ts` and to nav-highlight logic in `Header.astro:42-47`, which does `menuItem.path.split("/").pop()` against the URL path segment to decide the active state. Changing `activeNav` enum values or `MENU` paths without updating the other will silently break nav highlighting.
 - `headings` — optional manual override array. In `PostLayout.astro:36-40`: if `frontmatter.headings` is non-empty, it's used verbatim instead of the rendered headings from `entry.render()`. There's a TODO (`PostLayout.astro:14-15`) to accept only indices+overrides instead of the full array, not yet implemented.
+- `ai_use` — optional list of AI tools that helped write the entry, one or more of `gpt`, `claude`, `gemini`, `grok`, `qwen`, `deepseek`. When present and non-empty, `PostLayout.astro` renders an attribution line ("`<icon> <name>` helped write this page.") left-aligned below the date row, above the article body. Icon/name mapping lives in `src/assets/aitools.ts`, sourced from `@lobehub/icons-static-svg` (raw `?raw` SVG imports, zero React dependency) and forced monochrome (`overlay0`) via `fill: currentColor !important` in `PostLayout.astro`'s scoped `<style>`.
 
 ## Scaffolding new content
 
