@@ -10,7 +10,7 @@ Hey there! I am Roudranil. Professionally, I work as a Machine Learning Scientis
 
 I take a keen interest in the math behind ML, engineering philosophies, linux, and programming in general. A bit of gaming too at times.
 
-Besides my professional interests, I'm a musician and have been playing the mandolin 2018, specializing in Bengali folk music and retro songs. I also play the banjo and the melodica. As an open-source enthusiast and hobbyist Linux user, I enjoy tinkering with my Linux rice. Click [here](/stuff) to view all my nerdy stuff (WIP!).
+Besides my professional interests, I'm a musician and have been playing the mandolin 2018, specializing in Bengali folk music and retro songs. I also play the banjo and the melodica. As an open-source enthusiast and hobbyist Linux user, I enjoy tinkering with my Linux rice. Click [here](/posts) to view all my nerdy stuff (WIP!).
 
 ## Coursework
 

@@ -14,13 +14,13 @@ done
 
 # Check if name is provided
 if [[ -z "$name" ]]; then
-    echo "Usage: npm run create -- -c <page/posts/projects/stuff> <name-of-page>"
+    echo "Usage: npm run create -- -c <posts/projects> <name-of-page>"
     exit 1
 fi
 
 # Determine the target directory
 base_dir="./src/content"
-if [[ "$category" == "posts" || "$category" == "projects" || "$category" == "stuff" ]]; then
+if [[ "$category" == "posts" || "$category" == "projects" ]]; then
     target_dir="$base_dir/$category"
 else
     target_dir="$base_dir"

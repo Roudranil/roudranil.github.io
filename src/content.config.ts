@@ -6,14 +6,7 @@ const baseSchema = z.object({
     description: z.string().optional(),
     date: z.date(),
     draft: z.boolean(),
-    activeNav: z.enum([
-        "~",
-        "about",
-        "stuff",
-        "projects",
-        "posts",
-        "contact",
-    ]),
+    activeNav: z.enum(["~", "about", "projects", "posts", "contact"]),
     shortTitle: z.string().optional(),
     headings: z
         .array(
@@ -38,13 +31,7 @@ const projectsCollection = defineCollection({
     }),
 });
 
-const stuffCollection = defineCollection({
-    loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/stuff" }),
-    schema: baseSchema,
-});
-
 export const collections = {
     posts: postsCollection,
     projects: projectsCollection,
-    stuff: stuffCollection,
 };
