@@ -14,7 +14,7 @@
 ├── src/
 │   ├── assets/          # social icon SVGs
 │   ├── components/      # Astro components
-│   ├── content/         # posts/, projects/, stuff/ — markdown/mdx content
+│   ├── content/         # posts/, projects/ — markdown/mdx content
 │   ├── content.config.ts  # Zod schemas + glob() loaders (repo root of src, not src/content/)
 │   ├── layouts/         # BaseLayout, PostLayout, AboutLayout, ContactLayout
 │   ├── pages/           # file-based routing, incl. about.md/contact.md (plain pages)
@@ -52,11 +52,11 @@ BaseLayout (html/head/body shell, analytics, ClientRouter, scroll-to-top)
 └── Header + Breadcrumbs + <main>...<slot/>...</main>
 ```
 
-- `PostLayout.astro` — used by `posts`/`projects`/`stuff` collection entries via each collection's own `src/pages/<collection>/[...slug].astro` (three separate route files, no generic `[collection]` segment). Two-column grid (`sm:grid-cols-7`): ToC in 2 cols, content in 5 cols, collapses to single column below `sm`.
+- `PostLayout.astro` — used by `posts`/`projects` collection entries via each collection's own `src/pages/<collection>/[...slug].astro` (two separate route files, no generic `[collection]` segment). Two-column grid (`sm:grid-cols-7`): ToC in 2 cols, content in 5 cols, collapses to single column below `sm`.
 - `AboutLayout.astro` — same two-column ToC grid pattern, used only by `src/pages/about.md`.
 - `ContactLayout.astro` — single column, no ToC, used only by `src/pages/contact.md`.
 
-`about.md` and `contact.md` are plain Markdown pages under `src/pages/`, not part of any content collection — they pick their layout via the frontmatter `layout:` field. This is a separate authoring pattern from `posts`/`projects`/`stuff`, which are content-collection entries under `src/content/` rendered through a dynamic `[...slug].astro` route. Both patterns coexist; there's no plan to unify them.
+`about.md` and `contact.md` are plain Markdown pages under `src/pages/`, not part of any content collection — they pick their layout via the frontmatter `layout:` field. This is a separate authoring pattern from `posts`/`projects`, which are content-collection entries under `src/content/` rendered through a dynamic `[...slug].astro` route. Both patterns coexist; there's no plan to unify them.
 
 ## Components
 
