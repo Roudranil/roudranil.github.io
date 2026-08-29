@@ -7,7 +7,7 @@
 
 ## Project
 
-Personal portfolio site for Roudranil Das. Built with Astro 6, Tailwind CSS 4, deployed to GitHub Pages.
+Personal portfolio site for Roudranil Das. Built with Astro 7, Tailwind CSS 4, deployed to GitHub Pages.
 
 ## Branching Strategy
 
@@ -51,12 +51,13 @@ For details beyond this file's overview, see `docs/`:
 - `docs/styling.md` — Tailwind 4 setup, theme tokens, prose-override quirk, fonts
 - `docs/build-and-deploy.md` — npm scripts, astro.config.mjs, branching/release flow
 - `docs/quirks.md` — known gotchas and non-obvious couplings
+- `docs/aesthetic.md` — terminal/filesystem + LaTeX design philosophy, ToC-as-`tree` contract
 
 ## Tech Stack
 
 | Layer        | Tool                                   |
 | ------------ | -------------------------------------- |
-| Framework    | Astro 6 (SSG, Content Layer API)       |
+| Framework    | Astro 7 (SSG, Content Layer API)       |
 | Styling      | Tailwind CSS 4 via @tailwindcss/vite   |
 | Theme        | Catppuccin Mocha (@catppuccin/tailwindcss) |
 | Math         | KaTeX (remark-math + rehype-katex)     |
