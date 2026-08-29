@@ -10,6 +10,10 @@ import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 
 import { pluginLanguageBadge } from "./src/plugins/expressive-code-language-badge.mjs";
+import { getBranchName, getCommitHash } from "./src/utils/git.ts";
+
+const gitHash = getCommitHash();
+const gitBranch = getBranchName();
 
 const expressiveCodeConfig = {
     themes: ["catppuccin-mocha"],
@@ -47,5 +51,9 @@ export default defineConfig({
     ],
     vite: {
         plugins: [tailwindcss()],
+        define: {
+            "import.meta.env.PUBLIC_GIT_HASH": JSON.stringify(gitHash ?? ""),
+            "import.meta.env.PUBLIC_GIT_BRANCH": JSON.stringify(gitBranch ?? ""),
+        },
     },
 });
