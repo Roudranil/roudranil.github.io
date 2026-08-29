@@ -77,32 +77,16 @@
     }
 
 
-    .prose h1 {
-        font-size: 36px;
-    }
-
-    .prose h2 {
-        margin-top: 32px;
-        font-size: 30px;
-    }
-
-    .prose h3 {
-        font-size: 24px;
-    }
-
     .prose p {
         line-height: 1.5;
     }
 
 
     .prose pre {
-        border-width: 2px;
-        border-color: #313244;
-        border-radius: 1rem;
         margin-top: 0;
     }
 
-    .prose pre::-webkit-scrollbar {
+    .expressive-code pre::-webkit-scrollbar {
         width: 0;
     }
 
@@ -186,7 +170,6 @@
 
 .prose {
     --tw-prose-body: var(--catppuccin-color-text);
-    --tw-prose-headings: var(--catppuccin-color-rosewater);
     --tw-prose-bold: var(--catppuccin-color-text);
     --tw-prose-code: var(--catppuccin-color-lavender);
     --tw-prose-links: var(--catppuccin-color-sapphire);
@@ -197,9 +180,57 @@
     --tw-prose-captions: var(--catppuccin-color-subtext0);
     --tw-prose-th-borders: var(--catppuccin-color-surface0);
     --tw-prose-td-borders: var(--catppuccin-color-surface0);
-    --tw-prose-pre-bg: var(--catppuccin-color-mantle);
-    --tw-prose-pre-code: var(--catppuccin-color-text);
     --tw-prose-hr: var(--catppuccin-color-surface1);
+}
+
+.prose h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--catppuccin-color-maroon);
+}
+
+.prose h2 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-dark-rosewater);
+}
+
+.prose h3 {
+    font-size: var(--font-size-lg);
+    color: var(--catppuccin-color-rosewater);
+}
+
+.expressive-code .header {
+    position: relative;
+}
+
+.expressive-code .ec-lang-badge {
+    position: absolute;
+    inset-inline-start: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: "VictorMonoNerdFont";
+    color: var(--catppuccin-color-subtext0);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.expressive-code .copy button {
+    opacity: 0.75 !important;
+}
+
+.prose summary {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--catppuccin-color-overlay2);
+    opacity: 0.7;
+    cursor: pointer;
+    user-select: none;
+}
+
+.prose summary:hover {
+    opacity: 1;
 }
 
 /* Fonts */

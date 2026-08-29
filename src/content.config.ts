@@ -4,16 +4,10 @@ import { glob } from "astro/loaders";
 const baseSchema = z.object({
     title: z.string(),
     description: z.string().optional(),
+    subtitle: z.string().optional(),
     date: z.date(),
     draft: z.boolean(),
-    activeNav: z.enum([
-        "~",
-        "about",
-        "stuff",
-        "projects",
-        "posts",
-        "contact",
-    ]),
+    activeNav: z.enum(["~", "about", "projects", "posts", "contact"]),
     shortTitle: z.string().optional(),
     headings: z
         .array(
@@ -24,6 +18,7 @@ const baseSchema = z.object({
             }),
         )
         .optional(),
+    ai_use: z.array(z.enum(["gpt", "claude", "gemini", "grok", "qwen", "deepseek"])).optional(),
 });
 
 const postsCollection = defineCollection({
@@ -38,13 +33,7 @@ const projectsCollection = defineCollection({
     }),
 });
 
-const stuffCollection = defineCollection({
-    loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/stuff" }),
-    schema: baseSchema,
-});
-
 export const collections = {
     posts: postsCollection,
     projects: projectsCollection,
-    stuff: stuffCollection,
 };

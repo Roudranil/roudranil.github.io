@@ -7,6 +7,9 @@ import TableOfContents from "@components/TableOfContents.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import GithubLink from "@components/GithubLink.astro";
 import type { MarkdownHeading } from "astro";
+import type { AITool } from "types";
+import aiTools from "@assets/aitools";
+import { renderInlineMarkdown, stripInlineMarkdown } from "@utils/inlineMarkdown";
 
 // Basically there may be cases where i would want the heading text to be something else in the toc
 // in that case, send the entire heading array manually from the frontmatter itself
@@ -17,32 +20,37 @@ export interface Props {
     frontmatter: {
         title: string;
         description?: string;
+        subtitle?: string;
         date: Date;
         draft: boolean;
-        activeNav: "~" | "about" | "stuff" | "projects" | "posts" | "contact";
+        activeNav: "~" | "about" | "projects" | "posts" | "contact";
         shortTitle?: string;
         headings?: { depth: number; slug: string; text: string }[];
         github?: string;
+        ai_use?: AITool[];
     };
     headings: MarkdownHeading[];
+    lastEdited?: Date | null;
 }
 const dateOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
 };
-const { frontmatter, headings: propsheadings } = Astro.props;
+const { frontmatter, headings: propsheadings, lastEdited } = Astro.props;
 let headings: any[] = [];
 if (frontmatter.headings && frontmatter.headings.length > 0) {
     headings = frontmatter.headings;
 } else {
     headings = propsheadings;
 }
-frontmatter.date = new Date(frontmatter.date);
+const date = new Date(frontmatter.date);
+const editedDate =
+    lastEdited != null && lastEdited.toDateString() !== date.toDateString() ? lastEdited : null;
 ---
 
 <BaseLayout
-    title={`${frontmatter.title} | ${SITE.title}`}
+    title={`${stripInlineMarkdown(frontmatter.title)} | ${SITE.title}`}
     description={frontmatter.description}
 >
     <Header activeNav={frontmatter.activeNav} />
@@ -64,13 +72,24 @@ frontmatter.date = new Date(frontmatter.date);
 
             <div class="sm:col-span-5">
                 <section id="about" class="prose mx-auto max-w-3xl px-4">
-                    <h1 class="my-[32px]">{frontmatter.title}</h1>
+                    <h1 class="my-8" set:html={renderInlineMarkdown(frontmatter.title)} />
+                    {
+                        frontmatter.subtitle && (
+                            <h5 set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                        )
+                    }
                     <div class="flex items-center">
                         <h5>
+                            <span><span class="font-mono text-ctp-lavender">&nbsp;</span><time datetime={date.toISOString()}>
+                                {date.toLocaleDateString(undefined, dateOptions)}
+                            </time></span>
                             {
-                                frontmatter.date.toLocaleDateString(
-                                    undefined,
-                                    dateOptions,
+                                editedDate && (
+                                    <>
+                                        {" "}
+                                        <span class="not-italic">(</span>last edited on{" "}
+                                        <time datetime={editedDate.toISOString()}>{editedDate.toLocaleDateString(undefined, dateOptions)}</time><span class="not-italic">)</span>
+                                    </>
                                 )
                             }
                         </h5>
@@ -85,6 +104,22 @@ frontmatter.date = new Date(frontmatter.date);
                             )
                         }
                     </div>
+                    {
+                        frontmatter.ai_use && frontmatter.ai_use.length > 0 && (
+                            <p class="ai-use-notice mt-1 text-left text-base text-ctp-overlay0">
+                                {frontmatter.ai_use.map((tool: AITool, i: number) => (
+                                    <>
+                                        {i > 0 && ", "}
+                                        <span class="ai-use-item">
+                                            <Fragment set:html={aiTools[tool].icon} />
+                                            {aiTools[tool].name}
+                                        </span>
+                                    </>
+                                ))}{" "}
+                                helped write this page.
+                            </p>
+                        )
+                    }
                     <slot />
                 </section>
             </div>
@@ -96,5 +131,30 @@ frontmatter.date = new Date(frontmatter.date);
     @reference "@styles/base.css";
     h5 {
         @apply italic text-ctp-lavender;
+    }
+
+    .subtitle {
+        @apply text-base font-normal text-ctp-rosewater;
+    }
+
+    .subtitle :global(strong),
+    .subtitle :global(code) {
+        color: inherit;
+    }
+
+    .not-italic {
+        @apply not-italic;
+    }
+
+    .ai-use-notice :global(svg) {
+        display: inline-block;
+        width: 0.85em;
+        height: 0.85em;
+        vertical-align: -0.1em;
+        fill: currentColor !important;
+    }
+
+    .ai-use-notice :global(svg *) {
+        fill: currentColor !important;
     }
 </style>

@@ -1,11 +1,34 @@
 ---
 import Socials from "./Socials.astro";
+
+const gitHash = import.meta.env.PUBLIC_GIT_HASH;
+const gitBranch = import.meta.env.PUBLIC_GIT_BRANCH;
+// placeholder nerd-font git-branch glyph; \uXXXX escape per docs/quirks.md
+// so it survives edits — swap the codepoint for the real one when given.
+const branchIcon = "";
 ---
 
 <footer class="mt-auto">
     <div class="footer-wrapper">
         <Socials centered />
-        <span class="powered-by">Powered by <a href="https://astro.build/">Astro</a></span>
+        <span class="powered-by">
+            Powered by <a href="https://astro.build/">Astro</a>
+            {
+                gitHash && (
+                    <>
+                        <span class="separator">&middot;</span>
+                        <a
+                            class="git-info"
+                            href={`https://github.com/Roudranil/roudranil.github.io/tree/${gitHash}`}
+                        >
+                            <span class="branch-icon">{branchIcon}</span>
+                            {gitHash}
+                            {gitBranch && ` (${gitBranch})`}
+                        </a>
+                    </>
+                )
+            }
+        </span>
     </div>
 </footer>
 
@@ -16,10 +39,22 @@ import Socials from "./Socials.astro";
     }
 
     .footer-wrapper {
-        @apply mt-[128px] flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4;
+        @apply mt-32 flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4;
     }
 
     .powered-by {
         @apply my-2 text-xs text-ctp-peach;
+    }
+
+    .separator {
+        @apply mx-1;
+    }
+
+    .git-info {
+        @apply font-mono text-xs text-ctp-peach no-underline;
+    }
+
+    .branch-icon {
+        @apply mr-1;
     }
 </style>

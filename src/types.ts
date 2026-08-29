@@ -24,3 +24,14 @@ export type SocialObjects = {
     active: boolean;
     linkTitle: string;
 }[];
+
+export type AITool = "gpt" | "claude" | "gemini" | "grok" | "qwen" | "deepseek";
+
+export type AIToolInfo = {
+    name: string;
+    icon: string;
+};
+
+export type AIToolIcons = {
+    [tool in AITool]: AIToolInfo;
+};

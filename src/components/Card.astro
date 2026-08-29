@@ -1,4 +1,6 @@
 ---
+import { stripInlineMarkdown } from "@utils/inlineMarkdown";
+
 export interface Props {
     title: string;
     date: Date;
@@ -12,12 +14,13 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 };
 
 const { title, date, url } = Astro.props;
+const plainTitle = stripInlineMarkdown(title);
 ---
 
 <a href={url}>
     <div class="card-container">
         <div class="post-title flex justify-start">
-            <code>&nbsp;</code><div>{title}</div>
+            <code>&nbsp;</code><div>{plainTitle}</div>
         </div>
         <div class="post-date">
             &nbsp;&nbsp;&nbsp;<code>&nbsp;&nbsp;</code>{

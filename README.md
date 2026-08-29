@@ -4,7 +4,7 @@
   <img src="public/icon.svg" alt="site icon" style="width: 200px; " />
 </div>
 
-Personal portfolio site for Roudranil Das. Built with Astro 6, Tailwind CSS 4, and deployed to GitHub Pages.
+Personal portfolio site for Roudranil Das. Built with Astro 7, Tailwind CSS 4, and deployed to GitHub Pages.
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ public/
 
 | Layer       | Technology                                         |
 | ----------- | -------------------------------------------------- |
-| Framework   | Astro 6                                            |
+| Framework   | Astro 7                                            |
 | Styling     | Tailwind CSS 4 + @catppuccin/tailwindcss (mocha)   |
 | Typography  | @tailwindcss/typography                            |
 | Math        | remark-math + rehype-katex                         |

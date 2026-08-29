@@ -1,56 +1,98 @@
 ---
 title: "How to render math in Astro - A detailed guide"
+subtitle: "This article aims to *de-mystify* writing math in Astro for non web developers."
 description: A comprehensive guide on enabling and writing math in your markdown posts in astro (and other static site generators), using KaTeX
 date: 2023-12-09T14:19:27.901Z
 draft: false
 activeNav: posts
 shortTitle: "render-math-in-astro.md"
+ai_use:
+    - claude
 headings:
     - depth: 2
       slug: "starting-points"
       text: "Starting points"
     - depth: 2
-      slug: "customising-katexkatexkatex"
+      slug: "customising-katex"
       text: "Customising KaTeX"
     - depth: 2
       slug: "extras"
       text: "Extras"
 ---
 
-Pretty much the heading. This article aims to _de-mystify_ writing math in Astro for non web developers.
-
 ## Starting points
-
-I believe the following blog post is a really good starting point - it goes in depth into installing the required plugins - `remark-math` and `rehype-katex`.
-
-<code class="text-base">&nbsp;</code>[Render Math in Astro Markdown Pages with
-Katex](https://ileumas.com/writing/2022/03/astro-math-katex/)
 
 $\KaTeX$ is what we are going to use to render the math from the markdown documents. On a very high level it parses everything within `$...$` or `$$...$$` in your documents and applies css styles to it. The docs are pretty detailed although it can get somewhat vague at times; check them out [here](https://katex.org/docs/browser.html).
 
+To wire this into Astro you need two plugins - `remark-math` (parses the `$...$` and `$$...$$` syntax into math nodes) and `rehype-katex` (turns those nodes into the actual $\KaTeX$ HTML). Install both along with `katex` itself:
+
+```bash
+npm install remark-math rehype-katex katex
+```
+
+Now, there are two ways to plug these into `astro.config.mjs`, depending on how much control you want over the markdown pipeline:
+
+-   If you are on the default markdown setup, you can just pass them as `markdown.remarkPlugins` and `markdown.rehypePlugins`.
+-   If you already have a custom `unified()` processor (which is the case on this site, since Shiki config and other plugins live there too), plug them into that instead:
+
+```javascript title="astro.config.mjs"
+import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+
+export default defineConfig({
+    markdown: {
+        processor: unified({
+            remarkPlugins: [remarkMath],
+            rehypePlugins: [rehypeKatex],
+        }),
+    },
+});
+```
+
+Order matters here - `remark-math` runs on the markdown AST before it turns into HTML, `rehype-katex` runs after. Get this backwards and nothing renders, it just silently leaves your `$...$` as plain text.
+
 ## Customising $\KaTeX$
 
-As mentioned before, $\KaTeX$ does somewhat of a poor job of explaining how to customise the styles in there docs. They outline [here](https://katex.org/docs/font) how the fonts can be customised (and you should, $\KaTeX$ fonts differ considerably from the $\LaTeX$ default - <span class="font-serif">Computer Modern Roman</span>)
+$\KaTeX$ does a somewhat poor job of explaining how to customise the styles in its own docs. It outlines [here](https://katex.org/docs/font) how the fonts can be customised, and you should - $\KaTeX$ fonts differ considerably from the $\LaTeX$ default, which is <span class="font-serif">Computer Modern Roman</span>.
 
-There is a simpler procedure:
+Here is the procedure we actually use on this site:
 
--   _Motivation_: We want to overwrite the default styles $\KaTeX$ applies, as defined in the `katex.min.css` stylesheet which we saw how to load in the previously referred link.
--   To do this, we will load another local static stylesheet _after_ loading `katex.min.css` which redefines only those classes we want to modify.
+-   _Motivation_: We want to overwrite the default styles $\KaTeX$ applies, as defined in `katex.min.css`.
+-   Self-host `katex.min.css` instead of pulling it from a CDN - copy it from `node_modules/katex/dist/katex.min.css` into `public/styles/`. Do the same for the font files in `node_modules/katex/dist/fonts/` if you plan to keep any of KaTeX's own fonts.
+-   Load another local stylesheet **after** `katex.min.css`, which redefines only the classes you want to change.
 
-```html:BaseLayout.astro
-<link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
-    crossorigin="anonymous"
-/>
-<!-- Next load the local stylesheet -->
+```html title="BaseLayout.astro"
+<link rel="stylesheet" href="/styles/katex.min.css" />
 <link rel="stylesheet" href="/styles/katex-custom.css" />
 ```
 
--   Now, **where to place this local stylesheet?** Referring the Astro docs, local stylesheets are stored in the `/public/styles/` directory. This is analogous to how you store fonts in the `/public/fonts/` directory.
--   You can load all the custom math fonts you want, override colors and do all sorts of stuff - just have a look at the actual `katex.min.css` file to refer the name of the classes.
+We take this one step further on this site and swap out $\KaTeX$'s own math fonts entirely for Computer Modern, so that math matches the rest of the body text. That means declaring `@font-face` rules for each font family and then remapping every $\KaTeX$ class (`.mathrm`, `.mathit`, `.mathbf`, `.mathcal`, `.mathfrak`, and so on) to point at them:
+
+```css title="katex-custom.css"
+@font-face {
+    font-family: "ComputerModernRoman";
+    font-style: normal;
+    font-weight: normal;
+    src: url("/fonts/cm/cm-serif.ttf") format("truetype");
+}
+
+.katex {
+    font-family: "ComputerModernRoman";
+}
+.katex .mathrm {
+    font-family: "ComputerModernRoman";
+    font-style: normal;
+}
+```
+
+-   **Where does this local stylesheet go?** Referring the Astro docs, local stylesheets live in `public/styles/`. Same idea as how fonts live in `public/fonts/`.
+-   Just open the actual `katex.min.css` file to see the class names, then override whichever ones you care about. You can override colors, weights, whatever - not just fonts.
 
 ## Extras
 
-If you want the exact $\LaTeX$ fonts, download them from [here](https://www.fontsquirrel.com/fonts/computer-modern). Load them in the `katex-custom.css` file and you are good to go!
+If you want the exact $\LaTeX$ fonts, download Computer Modern from [here](https://www.fontsquirrel.com/fonts/computer-modern), self-host the `.ttf` files under `public/fonts/`, and wire them up in `katex-custom.css` as shown above. Two things worth remembering:
+
+-   Self-hosting means no CDN dependency and no request to a third party at page load - worth doing for a static site anyway.
+-   $\KaTeX$'s own fonts still render fine if you skip this step - Computer Modern is a purely aesthetic choice to match a $\LaTeX$-like look.

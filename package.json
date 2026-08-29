@@ -12,22 +12,27 @@
         "create": "bash scripts/create.sh --"
     },
     "dependencies": {
-        "@astrojs/check": "^0.9.9",
-        "@astrojs/mdx": "^5.0.6",
+        "@astrojs/check": "^0.9.10",
+        "@astrojs/markdown-remark": "^7.2.4",
+        "@astrojs/mdx": "^7.0.8",
         "@astrojs/partytown": "^2.1.7",
-        "@astrojs/sitemap": "^3.7.2",
+        "@astrojs/sitemap": "^3.7.3",
         "@catppuccin/tailwindcss": "^1.0.0",
+        "@expressive-code/core": "^0.44.1",
+        "@lobehub/icons-static-svg": "^1.94.0",
         "@tailwindcss/typography": "^0.5.19",
-        "@tailwindcss/vite": "^4.3.0",
-        "astro": "^6.3.3",
-        "dompurify": "^3.4.5",
+        "@tailwindcss/vite": "^4.3.3",
+        "astro": "^7.2.9",
+        "dompurify": "^3.4.14",
+        "rehype-expressive-code": "^0.44.1",
         "rehype-katex": "^7.0.1",
         "remark-math": "^6.0.0",
-        "tailwindcss": "^4.3.0",
-        "typescript": "^6.0.3"
+        "tailwindcss": "^4.3.3",
+        "typescript": "^6.0.3",
+        "vite": "^8.2.2"
     },
     "devDependencies": {
-        "prettier": "^3.8.3",
+        "prettier": "^3.9.6",
         "prettier-plugin-astro": "^0.14.1"
     }
 }

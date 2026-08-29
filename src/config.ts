@@ -15,10 +15,6 @@ export const MENU: MenuItem[] = [
         path: "/about",
     },
     {
-        title: "~/stuff",
-        path: "/stuff",
-    },
-    {
         title: "~/projects",
         path: "/projects",
     },

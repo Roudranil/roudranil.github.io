@@ -6,13 +6,16 @@ description: "this page contains information about me"
 
 ## Introduction
 
-Hey there! I'm Roudranil Das, a master's student of data science at the Chennai Mathematical Institute. I completed my bachelor's in mathematics from St. Xavier's College, Kolkata. Currently, I am working as a data scientist in the Data Science and Innovation team at Kantar Analytics Practice.
+Hey there! I am Roudranil. Professionally, I work as a Machine Learning Scientist in the Advertising AI team at Expedia Group. I am based out of Bangalore currently (starting march 2026). Prior to that, I worked as a Data Scientist in Kantar's Data Science and Innovation Team, based out of Chennai (from 2024 to 2026). I did my masters in Data Science from [Chennai Mathematical Institute](https://www.cmi.ac.in/) and bachelors in math from St. Xavier's College, Kolkata.
 
-I am primarily interested in all sorts of practical applications of ML to solve interesting problems, specifically in solving accessibility problems for people with disabilities using ML. I also have a keen interest in the audio and music domain and its intersection with AI.
+I take a keen interest in the math behind ML, engineering philosophies, linux, and programming in general. A bit of gaming too at times.
 
-Besides my professional interests, I'm a musician and have been playing the mandolin for the past 6 years, specializing in Bengali folk music and retro songs. I also play the banjo and the melodica. As an open-source enthusiast and hobbyist Linux user, I enjoy tinkering with my Linux rice. Click [here](/stuff) to view all my nerdy stuff (WIP!).
+Besides my professional interests, I'm a musician and have been playing the mandolin 2018, specializing in Bengali folk music and retro songs. I also play the banjo and the melodica. As an open-source enthusiast and hobbyist Linux user, I enjoy tinkering with my Linux rice. Click [here](/posts) to view all my nerdy stuff (WIP!).
 
 ## Coursework
+
+<details>
+<summary>Click to expand</summary>
 
 During my undergraduate, I took courses in
 
@@ -38,6 +41,8 @@ Besides I also dabbled in theoretical computer science which I got to explore mo
 -   Intro to GenerativeAI
 -   Data privacy and ethical AI
 -   Computer Vision
+
+</details>
 
 ## Awards and Achievements
 

@@ -22,6 +22,7 @@ const { centered = true } = Astro.props;
             <a
                 href={social.href}
                 title={social.linkTitle}
+                aria-label={social.linkTitle}
                 class="social-link-button"
             >
                 <Fragment set:html={icons[social.name]} />
