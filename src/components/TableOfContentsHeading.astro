@@ -18,11 +18,7 @@ const { heading } = Astro.props;
     >
         {heading.prefix}{heading.connector}
     </span>
-    <TextLink
-        href={"#" + heading.slug}
-        className="text-sm"
-        color="text-ctp-overlay1"
-    >
+    <TextLink href={"#" + heading.slug} className="text-sm">
         {heading.text}
     </TextLink>
     {
