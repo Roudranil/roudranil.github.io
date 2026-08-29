@@ -25,13 +25,14 @@ export interface Props {
         github?: string;
     };
     headings: MarkdownHeading[];
+    lastEdited?: Date | null;
 }
 const dateOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
 };
-const { frontmatter, headings: propsheadings } = Astro.props;
+const { frontmatter, headings: propsheadings, lastEdited } = Astro.props;
 let headings: any[] = [];
 if (frontmatter.headings && frontmatter.headings.length > 0) {
     headings = frontmatter.headings;
@@ -39,6 +40,8 @@ if (frontmatter.headings && frontmatter.headings.length > 0) {
     headings = propsheadings;
 }
 const date = new Date(frontmatter.date);
+const editedDate =
+    lastEdited != null && lastEdited.toDateString() !== date.toDateString() ? lastEdited : null;
 ---
 
 <BaseLayout
@@ -67,7 +70,18 @@ const date = new Date(frontmatter.date);
                     <h1 class="my-[32px]">{frontmatter.title}</h1>
                     <div class="flex items-center">
                         <h5>
-                            {date.toLocaleDateString(undefined, dateOptions)}
+                            <time datetime={date.toISOString()}>
+                                {date.toLocaleDateString(undefined, dateOptions)}
+                            </time>
+                            {
+                                editedDate && (
+                                    <>
+                                        {" "}
+                                        <span class="not-italic">(</span>last edited on{" "}
+                                        <time datetime={editedDate.toISOString()}>{editedDate.toLocaleDateString(undefined, dateOptions)}</time><span class="not-italic">)</span>
+                                    </>
+                                )
+                            }
                         </h5>
                         {
                             frontmatter.github && (
@@ -91,5 +105,9 @@ const date = new Date(frontmatter.date);
     @reference "@styles/base.css";
     h5 {
         @apply italic text-ctp-lavender;
+    }
+
+    .not-italic {
+        @apply not-italic;
     }
 </style>
