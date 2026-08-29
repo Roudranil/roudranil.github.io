@@ -4,6 +4,7 @@ import { glob } from "astro/loaders";
 const baseSchema = z.object({
     title: z.string(),
     description: z.string().optional(),
+    subtitle: z.string().optional(),
     date: z.date(),
     draft: z.boolean(),
     activeNav: z.enum(["~", "about", "projects", "posts", "contact"]),

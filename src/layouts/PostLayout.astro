@@ -9,6 +9,7 @@ import GithubLink from "@components/GithubLink.astro";
 import type { MarkdownHeading } from "astro";
 import type { AITool } from "types";
 import aiTools from "@assets/aitools";
+import { renderInlineMarkdown, stripInlineMarkdown } from "@utils/inlineMarkdown";
 
 // Basically there may be cases where i would want the heading text to be something else in the toc
 // in that case, send the entire heading array manually from the frontmatter itself
@@ -19,6 +20,7 @@ export interface Props {
     frontmatter: {
         title: string;
         description?: string;
+        subtitle?: string;
         date: Date;
         draft: boolean;
         activeNav: "~" | "about" | "projects" | "posts" | "contact";
@@ -48,7 +50,7 @@ const editedDate =
 ---
 
 <BaseLayout
-    title={`${frontmatter.title} | ${SITE.title}`}
+    title={`${stripInlineMarkdown(frontmatter.title)} | ${SITE.title}`}
     description={frontmatter.description}
 >
     <Header activeNav={frontmatter.activeNav} />
@@ -70,7 +72,12 @@ const editedDate =
 
             <div class="sm:col-span-5">
                 <section id="about" class="prose mx-auto max-w-3xl px-4">
-                    <h1 class="my-8">{frontmatter.title}</h1>
+                    <h1 class="my-8" set:html={renderInlineMarkdown(frontmatter.title)} />
+                    {
+                        frontmatter.subtitle && (
+                            <p class="subtitle" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                        )
+                    }
                     <div class="flex items-center">
                         <h5>
                             <time datetime={date.toISOString()}>
@@ -124,6 +131,15 @@ const editedDate =
     @reference "@styles/base.css";
     h5 {
         @apply italic text-ctp-lavender;
+    }
+
+    .subtitle {
+        @apply text-base font-normal text-ctp-rosewater;
+    }
+
+    .subtitle :global(strong),
+    .subtitle :global(code) {
+        color: inherit;
     }
 
     .not-italic {
