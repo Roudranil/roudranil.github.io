@@ -19,7 +19,7 @@
 │   ├── layouts/         # BaseLayout, PostLayout, AboutLayout, ContactLayout
 │   ├── pages/           # file-based routing, incl. about.md/contact.md (plain pages)
 │   ├── styles/base.css  # Tailwind + theme + prose overrides
-│   ├── utils/utils.js    # buildTOC (plain JS, only non-TS source file)
+│   ├── utils/utils.ts    # buildTOC (nests headings + computes tree(1)-style prefixes)
 │   ├── config.ts        # SITE, MENU, SOCIALS
 │   └── types.ts
 ├── astro.config.mjs
@@ -39,7 +39,7 @@ Defined in `tsconfig.json:9-16`:
 | `@styles/*` | `src/styles/*` |
 | `@layouts/*` | `src/layouts/*` |
 | `@config` | `src/config.ts` (single file, no `/*`) |
-| `@utils` | `src/utils/utils.js` (single file, no `/*`) |
+| `@utils` | `src/utils/utils.ts` (single file, no `/*`) |
 
 `@utils` and `@config` map to one file each, not a directory. `@utils/anything` will not resolve — only `import { buildTOC } from "@utils"` works.
 
@@ -69,6 +69,6 @@ BaseLayout (html/head/body shell, analytics, ClientRouter, scroll-to-top)
 | `GithubLink.astro` | Pill-style GitHub link, rendered in `PostLayout` when `frontmatter.github` is set |
 | `Header.astro` | Top nav; reads `SITE`/`MENU` from `@config`; contains commented-out dead code (unused logo SVG, cursor-blink, alt underline) |
 | `Socials.astro` | Renders social icons from `SOCIALS` config filtered by `active` |
-| `TableOfContents.astro` | Wraps `buildTOC` output in a `<ul>` |
-| `TableOfContentsHeading.astro` | Recursive TOC item, uses `<Astro.self>` for nesting; box-drawing glyphs via unicode escapes in CSS `content` |
+| `TableOfContents.astro` | Wraps `buildTOC` output in a `<ul>`; see `docs/aesthetic.md` for the tree-authenticity intent |
+| `TableOfContentsHeading.astro` | Recursive TOC item, uses `<Astro.self>` for nesting; renders precomputed `tree`-style prefix/connector glyphs, see `docs/aesthetic.md` |
 | `TextLink.astro` | Generic styled `<a>` wrapper (color/underline/disabled props); used by `TableOfContentsHeading` |

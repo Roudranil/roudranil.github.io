@@ -27,3 +27,5 @@ All fonts are self-hosted via `@font-face` in `base.css:207-337`:
 - 6 faces for Victor Mono Nerd Font (regular/mono variants, normal/italic/bold) from `/fonts/VictorMonoNerdFont*.ttf`.
 
 No Google Fonts or other external font CDN is used for these. (KaTeX CSS previously loaded from a CDN — see `build-and-deploy.md` for the fix that self-hosts it too.)
+
+See `docs/aesthetic.md` for why post content is typeset this way (the LaTeX-document design language, alongside the site's terminal chrome).
