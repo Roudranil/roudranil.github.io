@@ -96,13 +96,10 @@
 
 
     .prose pre {
-        border-width: 2px;
-        border-color: #313244;
-        border-radius: 1rem;
         margin-top: 0;
     }
 
-    .prose pre::-webkit-scrollbar {
+    .expressive-code pre::-webkit-scrollbar {
         width: 0;
     }
 
@@ -197,9 +194,29 @@
     --tw-prose-captions: var(--catppuccin-color-subtext0);
     --tw-prose-th-borders: var(--catppuccin-color-surface0);
     --tw-prose-td-borders: var(--catppuccin-color-surface0);
-    --tw-prose-pre-bg: var(--catppuccin-color-mantle);
-    --tw-prose-pre-code: var(--catppuccin-color-text);
     --tw-prose-hr: var(--catppuccin-color-surface1);
+}
+
+.expressive-code .header {
+    position: relative;
+}
+
+.expressive-code .ec-lang-badge {
+    position: absolute;
+    inset-inline-start: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: "VictorMonoNerdFont";
+    color: var(--catppuccin-color-subtext0);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.expressive-code .copy button {
+    opacity: 0.75 !important;
 }
 
 .prose summary {
