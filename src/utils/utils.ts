@@ -51,7 +51,7 @@ function assignTreePrefixes(nodes: TOCNode[], ancestorPrefix: string): void {
     nodes.forEach((node, index) => {
         const isLastSibling = index === nodes.length - 1;
         node.prefix = ancestorPrefix;
-        node.connector = isLastSibling ? "└── " : "├── ";
+        node.connector = isLastSibling ? "└─" : "├─";
         assignTreePrefixes(node.subheadings, ancestorPrefix + (isLastSibling ? "    " : "│   "));
     });
 }
