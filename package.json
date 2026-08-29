@@ -19,6 +19,7 @@
         "@astrojs/sitemap": "^3.7.3",
         "@catppuccin/tailwindcss": "^1.0.0",
         "@expressive-code/core": "^0.44.1",
+        "@lobehub/icons-static-svg": "^1.94.0",
         "@tailwindcss/typography": "^0.5.19",
         "@tailwindcss/vite": "^4.3.3",
         "astro": "^7.2.9",

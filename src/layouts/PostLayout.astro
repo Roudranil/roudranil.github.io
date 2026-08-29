@@ -7,6 +7,8 @@ import TableOfContents from "@components/TableOfContents.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import GithubLink from "@components/GithubLink.astro";
 import type { MarkdownHeading } from "astro";
+import type { AITool } from "types";
+import aiTools from "@assets/aitools";
 
 // Basically there may be cases where i would want the heading text to be something else in the toc
 // in that case, send the entire heading array manually from the frontmatter itself
@@ -23,6 +25,7 @@ export interface Props {
         shortTitle?: string;
         headings?: { depth: number; slug: string; text: string }[];
         github?: string;
+        ai_use?: AITool[];
     };
     headings: MarkdownHeading[];
     lastEdited?: Date | null;
@@ -67,7 +70,7 @@ const editedDate =
 
             <div class="sm:col-span-5">
                 <section id="about" class="prose mx-auto max-w-3xl px-4">
-                    <h1 class="my-[32px]">{frontmatter.title}</h1>
+                    <h1 class="my-8">{frontmatter.title}</h1>
                     <div class="flex items-center">
                         <h5>
                             <time datetime={date.toISOString()}>
@@ -94,6 +97,22 @@ const editedDate =
                             )
                         }
                     </div>
+                    {
+                        frontmatter.ai_use && frontmatter.ai_use.length > 0 && (
+                            <p class="ai-use-notice mt-1 text-left text-base text-ctp-overlay0">
+                                {frontmatter.ai_use.map((tool: AITool, i: number) => (
+                                    <>
+                                        {i > 0 && ", "}
+                                        <span class="ai-use-item">
+                                            <Fragment set:html={aiTools[tool].icon} />
+                                            {aiTools[tool].name}
+                                        </span>
+                                    </>
+                                ))}{" "}
+                                helped write this page.
+                            </p>
+                        )
+                    }
                     <slot />
                 </section>
             </div>
@@ -109,5 +128,17 @@ const editedDate =
 
     .not-italic {
         @apply not-italic;
+    }
+
+    .ai-use-notice :global(svg) {
+        display: inline-block;
+        width: 0.85em;
+        height: 0.85em;
+        vertical-align: -0.1em;
+        fill: currentColor !important;
+    }
+
+    .ai-use-notice :global(svg *) {
+        fill: currentColor !important;
     }
 </style>

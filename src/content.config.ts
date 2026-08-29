@@ -17,6 +17,7 @@ const baseSchema = z.object({
             }),
         )
         .optional(),
+    ai_use: z.array(z.enum(["gpt", "claude", "gemini", "grok", "qwen", "deepseek"])).optional(),
 });
 
 const postsCollection = defineCollection({
