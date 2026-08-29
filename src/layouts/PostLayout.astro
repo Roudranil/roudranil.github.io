@@ -75,14 +75,14 @@ const editedDate =
                     <h1 class="my-8" set:html={renderInlineMarkdown(frontmatter.title)} />
                     {
                         frontmatter.subtitle && (
-                            <p class="subtitle" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                            <h5 set:html={renderInlineMarkdown(frontmatter.subtitle)} />
                         )
                     }
                     <div class="flex items-center">
                         <h5>
-                            <time datetime={date.toISOString()}>
+                            <span><span class="font-mono text-ctp-lavender">&nbsp;</span><time datetime={date.toISOString()}>
                                 {date.toLocaleDateString(undefined, dateOptions)}
-                            </time>
+                            </time></span>
                             {
                                 editedDate && (
                                     <>
