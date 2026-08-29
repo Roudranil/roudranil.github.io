@@ -1,12 +1,23 @@
 ---
 // TableOfContentsHeading.astro
 import TextLink from "./TextLink.astro";
+import type { TOCNode } from "@utils";
 import "@styles/base.css";
+
+export interface Props {
+    heading: TOCNode;
+}
 
 const { heading } = Astro.props;
 ---
 
 <li>
+    <span
+        class="select-none font-mono text-ctp-overlay1"
+        aria-hidden="true"
+    >
+        {heading.prefix}{heading.connector}
+    </span>
     <TextLink
         href={"#" + heading.slug}
         className="text-sm"
@@ -16,8 +27,8 @@ const { heading } = Astro.props;
     </TextLink>
     {
         heading.subheadings.length > 0 && (
-            <ul class="my-0">
-                {heading.subheadings.map((subheading: any) => (
+            <ul class="my-0 list-none pl-0">
+                {heading.subheadings.map((subheading) => (
                     <Astro.self heading={subheading} />
                 ))}
             </ul>
@@ -27,33 +38,19 @@ const { heading } = Astro.props;
 
 <style>
     @reference "@styles/base.css";
+    ul,
     li {
+        margin: 0;
+        padding: 0;
         list-style-type: none;
-        margin-left: -1em;
-        margin-bottom: 0;
-        /* padding-bottom: 0; */
-        margin-top: 0px;
+    }
+
+    li {
         word-wrap: break-word;
         line-height: 1.25;
     }
 
-    li:first-child::before {
-        @apply m-0 text-lg text-ctp-overlay1 content-["\251C"] hover:text-dark-sapphire;
-    }
-
-    li:last-child::before {
-        @apply m-0 text-lg text-ctp-overlay1 content-["\2514"] hover:text-dark-sapphire;
-    }
-
-    li::before {
-        @apply m-0 text-lg text-ctp-overlay1 content-["\251C"] hover:text-dark-sapphire;
-    }
-
-    li li::before {
-        @apply m-0 text-lg text-ctp-overlay1 content-["\251C"] hover:text-dark-sapphire;
-    }
-
-    li li:last-child::before {
-        @apply m-0 text-lg text-ctp-overlay1 content-["\2514"] hover:text-dark-sapphire;
+    span[aria-hidden] {
+        white-space: pre;
     }
 </style>
