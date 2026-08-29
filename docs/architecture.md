@@ -16,11 +16,13 @@
 │   ├── components/      # Astro components
 │   ├── content/         # posts/, projects/ — markdown/mdx content
 │   ├── content.config.ts  # Zod schemas + glob() loaders (repo root of src, not src/content/)
+│   ├── data/last-edited-cache.json  # self-healing fallback for per-file git-log lookups
 │   ├── layouts/         # BaseLayout, PostLayout, AboutLayout, ContactLayout
 │   ├── pages/           # file-based routing, incl. about.md/contact.md (plain pages)
 │   ├── plugins/         # expressive-code-language-badge.mjs — custom rehype-expressive-code plugin
 │   ├── styles/base.css  # Tailwind + theme + prose overrides
 │   ├── utils/utils.ts    # buildTOC (nests headings + computes tree(1)-style prefixes)
+│   ├── utils/git.ts      # commit hash/branch + per-file last-edited date, see docs/build-and-deploy.md
 │   ├── config.ts        # SITE, MENU, SOCIALS
 │   └── types.ts
 ├── astro.config.mjs
@@ -41,8 +43,9 @@ Defined in `tsconfig.json:9-16`:
 | `@layouts/*` | `src/layouts/*` |
 | `@config` | `src/config.ts` (single file, no `/*`) |
 | `@utils` | `src/utils/utils.ts` (single file, no `/*`) |
+| `@utils/*` | `src/utils/*` |
 
-`@utils` and `@config` map to one file each, not a directory. `@utils/anything` will not resolve — only `import { buildTOC } from "@utils"` works.
+`@config` maps to one file, not a directory — `@config/anything` will not resolve. `@utils` keeps its single-file mapping (`import { buildTOC } from "@utils"`) alongside the `@utils/*` wildcard added for `src/utils/git.ts` (`import { getLastEditedDate } from "@utils/git"`) — both patterns are valid at once, they don't conflict.
 
 ## Layout composition
 
@@ -66,7 +69,7 @@ BaseLayout (html/head/body shell, analytics, ClientRouter, scroll-to-top)
 | `Block.astro` | Callout box (info/alert/tip/normal variants), colors from `base.css` theme tokens |
 | `Breadcrumbs.astro` | Derives trail from `Astro.url.pathname`; last segment overridable via `shortTitle` prop |
 | `Card.astro` | Link card for collection index listings (title + formatted date) |
-| `Footer.astro` | Wraps `Socials` + "Powered by Astro" line |
+| `Footer.astro` | Wraps `Socials` + "Powered by Astro" line + a linked commit-hash/branch cluster (see `docs/build-and-deploy.md`) |
 | `GithubLink.astro` | Pill-style GitHub link, rendered in `PostLayout` when `frontmatter.github` is set |
 | `Header.astro` | Top nav; reads `SITE`/`MENU` from `@config`; contains commented-out dead code (unused logo SVG, cursor-blink, alt underline) |
 | `Socials.astro` | Renders social icons from `SOCIALS` config filtered by `active` |

@@ -43,3 +43,5 @@ nav entry no longer exist.
 ## Rendering path
 
 Each collection has its own dynamic route file — `src/pages/posts/[...slug].astro`, `src/pages/projects/[...slug].astro` (no generic `[collection]` segment). Each calls `getStaticPaths` over `getCollection(...)`, filters `draft`, and renders through `PostLayout`. Each collection also has its own `index.astro` for the listing page. `about.md`/`contact.md` are the exception — see `architecture.md`.
+
+Each `[...slug].astro` also derives a `lastEdited` prop from `git log` on `entry.filePath` (via `getLastEditedDate` in `src/utils/git.ts`) and passes it to `PostLayout`, which renders it next to the creation date as "(last edited on `<date>`)" — this is **not** a schema field; it's computed at build time from git history, not authored in frontmatter. See `docs/build-and-deploy.md` for the full mechanism and its cache fallback.
