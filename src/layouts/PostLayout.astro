@@ -38,7 +38,7 @@ if (frontmatter.headings && frontmatter.headings.length > 0) {
 } else {
     headings = propsheadings;
 }
-frontmatter.date = new Date(frontmatter.date);
+const date = new Date(frontmatter.date);
 ---
 
 <BaseLayout
@@ -67,12 +67,7 @@ frontmatter.date = new Date(frontmatter.date);
                     <h1 class="my-[32px]">{frontmatter.title}</h1>
                     <div class="flex items-center">
                         <h5>
-                            {
-                                frontmatter.date.toLocaleDateString(
-                                    undefined,
-                                    dateOptions,
-                                )
-                            }
+                            {date.toLocaleDateString(undefined, dateOptions)}
                         </h5>
                         {
                             frontmatter.github && (
