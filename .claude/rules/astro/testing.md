@@ -9,7 +9,16 @@ paths:
 
 # Astro/TypeScript Testing
 
-## Test Framework
+## Current practice
+
+No test runner is installed in this repo (`package.json` has no Vitest or other test dependency, no `*.test.ts` files exist). The primary correctness gate today is:
+
+- `npm run build` (`astro check && astro build`) — type-checks every `.astro`/`.ts` file and fails the build on type errors or broken content schemas
+- Manual verification via `npm run dev` for layout/component/visual changes
+
+Everything below is guidance for **if/when a test suite is added** — it is not describing an existing setup. Don't assume Vitest is available; check `package.json` before writing a test file.
+
+## Test Framework (if adopted)
 
 - **Vitest** — test runner, compatible with Vite/Astro's build pipeline
 - **@testing-library/dom** — for DOM assertions if component testing is added

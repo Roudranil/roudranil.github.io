@@ -144,36 +144,39 @@ export const NAV_MENU = [
 
 ## Content Schema Pattern
 
-Zod schemas in `src/content.config.ts` are the single source of truth for content types:
+Zod schemas in `src/content.config.ts` are the single source of truth for content types. This mirrors the actual current schema — keep this example in sync with the real file, don't let it drift:
 
 ```typescript
 // src/content.config.ts
-import { defineCollection, z } from 'astro:content';
+import { z, defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const baseSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
   date: z.date(),
-  draft: z.boolean().default(false),
-  activeNav: z.string(),
+  draft: z.boolean(),          // no default — every entry must set it explicitly
+  activeNav: z.enum(['~', 'about', 'stuff', 'projects', 'posts', 'contact']),
   shortTitle: z.string().optional(),
   headings: z.array(z.object({ depth: z.number(), slug: z.string(), text: z.string() })).optional(),
 });
 
-const posts = defineCollection({
-  type: 'content',
+const postsCollection = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
   schema: baseSchema,
 });
 
-const projects = defineCollection({
-  type: 'content',
+const projectsCollection = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: baseSchema.extend({
-    github: z.string().url().optional(),
+    github: z.string().optional(), // plain string, not URL-validated
   }),
 });
 
-export const collections = { posts, projects };
+export const collections = { posts: postsCollection, projects: projectsCollection };
 ```
+
+Uses the Astro 5+ `glob()` loader API — not the legacy `type: 'content'` collection API. `draft` has no `.default()`: omitting it is a validation error, not a silent `false`. `github` is deliberately unvalidated as a URL.
 
 Infer types from the schema — never write parallel type definitions:
 
@@ -248,25 +251,33 @@ const toc = buildTOC(headings);
 
 ## Astro Config Extensions
 
-New integrations and remark/rehype plugins go in `astro.config.mjs`. Keep additions minimal and document why each plugin is needed:
+New integrations and remark/rehype plugins go in `astro.config.mjs`. Keep additions minimal and document why each plugin is needed. This repo uses a custom `unified()` markdown processor (not the simpler top-level `markdown.remarkPlugins`/`rehypePlugins` keys) and wires Tailwind 4 via its Vite plugin, not `@astrojs/tailwind`:
 
 ```javascript
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import { unified } from '@astrojs/markdown-remark';
+import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
-  integrations: [tailwind(), mdx()],
+  integrations: [mdx()],
   markdown: {
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [rehypeKatex],
+    }),
     shikiConfig: { theme: 'catppuccin-mocha' },
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
 });
 ```
+
+New remark/rehype plugins go inside the `unified({...})` call, not as sibling `markdown.*` keys.
 
 ## References
 

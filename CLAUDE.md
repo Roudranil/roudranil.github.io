@@ -14,7 +14,7 @@ Personal portfolio site for Roudranil Das. Built with Astro 6, Tailwind CSS 4, d
 - `main` — production; deploys automatically on push (GitHub Pages)
 - `dev` — integration branch; all feature work merges here
 - Feature branches — branch off `dev`, merge back into `dev`
-- Releases — manual merge from `dev` → `main` via `scripts/release.sh` or GitHub Actions workflow_dispatch
+- Releases — manual `workflow_dispatch` trigger of `.github/workflows/release.yml` (merges `dev` → `main`, tags `v<version>` from `./version`, merges back into `dev`)
 - No direct commits to `main`
 
 ## Working Procedure
@@ -41,6 +41,16 @@ npm run preview    # Preview production build
 npm run sync-resume # Sync resume PDF from source
 npm run create     # Scaffold new content via scripts/create.sh
 ```
+
+## Deep Dives
+
+For details beyond this file's overview, see `docs/`:
+
+- `docs/architecture.md` — folder map, path aliases, layout composition, component list
+- `docs/content-model.md` — content collection schemas, frontmatter fields, scaffolding
+- `docs/styling.md` — Tailwind 4 setup, theme tokens, prose-override quirk, fonts
+- `docs/build-and-deploy.md` — npm scripts, astro.config.mjs, branching/release flow
+- `docs/quirks.md` — known gotchas and non-obvious couplings
 
 ## Tech Stack
 
@@ -70,9 +80,10 @@ npm run create     # Scaffold new content via scripts/create.sh
 ```
 .
 ├── .claude/             # Claude Code config + memory
-├── .github/workflows/   # GitHub Actions deploy pipeline
+├── .github/workflows/   # deploy.yml (auto-deploy main), release.yml (dev->main)
+├── docs/                # Architecture, content model, styling, build/deploy, quirks
 ├── public/
-│   ├── fonts/           # Self-hosted fonts (Computer Modern, Victor Mono, math)
+│   ├── fonts/           # Self-hosted fonts (Computer Modern, Victor Mono, KaTeX, math)
 │   ├── resume/          # Resume PDF
 │   └── styles/          # Global CSS (KaTeX, fonts, remark, misc)
 ├── scripts/             # Utility shell scripts (sync-resume, create)
@@ -80,7 +91,7 @@ npm run create     # Scaffold new content via scripts/create.sh
 │   ├── assets/          # Social icon SVGs
 │   ├── components/      # Astro components
 │   ├── content/         # Content collections (posts/, projects/, stuff/)
-│   │   └── config.ts    # Zod schemas + glob() loaders
+│   ├── content.config.ts  # Zod schemas + glob() loaders
 │   ├── layouts/
 │   │   ├── BaseLayout.astro    # Root layout (head, analytics, ClientRouter)
 │   │   ├── PostLayout.astro    # Posts/projects/stuff (TOC + content)
