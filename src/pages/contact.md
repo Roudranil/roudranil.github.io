@@ -13,4 +13,3 @@ Hey there! <code class="text-dark-rosewater text-lg">󱠢</code>. Thanks for dro
 ### Socials
 
 - [LinkedIn](https://www.linkedin.com/in/roudranil-das/ "https://www.linkedin.com/in/roudranil-das/")
-- Discord: `methedrudy`
