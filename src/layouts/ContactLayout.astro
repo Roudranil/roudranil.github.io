@@ -15,7 +15,7 @@ export interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout title={`${frontmatter.title} | ${SITE.title}`}>
+<BaseLayout title={`${frontmatter.title} | ${SITE.title}`} description={frontmatter.description}>
     <Header activeNav="contact" />
     <Breadcrumbs />
     <main>
