@@ -144,14 +144,14 @@ const ogImageURL = new URL(image, Astro.site).href;
         <ClientRouter />
     </head>
     <body>
-        <div id="scrolltotop-wrap">
+        <!-- <div id="scrolltotop-wrap">
             <button id="scrolltotop" title="Scroll to Top"
                 ><span class="font-mono">󰁝</span></button
             >
-        </div>
+        </div> -->
         <slot />
         <Footer />
-        <style>
+        <!-- <style>
     @reference "@styles/base.css";
             #scrolltotop-wrap {
                 position: sticky;
@@ -164,7 +164,7 @@ const ogImageURL = new URL(image, Astro.site).href;
                 top: calc(100dvh - 4rem);
                 right: calc(1rem - var(--body-right-inset, 0px));
             }
-        </style>
+        </style> -->
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
