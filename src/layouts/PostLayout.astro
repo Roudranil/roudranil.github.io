@@ -101,9 +101,10 @@ const structuredData = {
             <div class="sm:col-span-5">
                 <section id="about" class="prose mx-auto max-w-3xl px-4">
                     <h1 set:html={renderInlineMarkdown(frontmatter.title)} />
+                    <div class="post-meta">
                     {
                         frontmatter.subtitle && (
-                            <h5 set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                            <h5 class="font-bold" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
                         )
                     }
                     <h5>
@@ -139,6 +140,7 @@ const structuredData = {
                             </p>
                         )
                     }
+                    </div>
                     <slot />
                 </section>
             </div>
