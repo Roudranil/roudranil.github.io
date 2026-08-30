@@ -28,6 +28,7 @@ export interface Props {
         headings?: { depth: number; slug: string; text: string }[];
         github?: string;
         ai_use?: AITool[];
+        tags?: string[];
     };
     headings: MarkdownHeading[];
     lastEdited?: Date | null;
@@ -47,12 +48,41 @@ if (frontmatter.headings && frontmatter.headings.length > 0) {
 const date = new Date(frontmatter.date);
 const editedDate =
     lastEdited != null && lastEdited.toDateString() !== date.toDateString() ? lastEdited : null;
+
+const postURL = new URL(Astro.url.pathname, Astro.site).href;
+const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: stripInlineMarkdown(frontmatter.title),
+    ...(frontmatter.subtitle && {
+        alternativeHeadline: stripInlineMarkdown(frontmatter.subtitle),
+    }),
+    description: frontmatter.description,
+    datePublished: date.toISOString(),
+    dateModified: (editedDate ?? date).toISOString(),
+    ...(frontmatter.tags && frontmatter.tags.length > 0 && { keywords: frontmatter.tags.join(", ") }),
+    author: {
+        "@type": "Person",
+        name: SITE.author,
+        url: SITE.website,
+    },
+    url: postURL,
+};
 ---
 
 <BaseLayout
     title={`${stripInlineMarkdown(frontmatter.title)} | ${SITE.title}`}
     description={frontmatter.description}
+    type="article"
+    publishedTime={date}
+    modifiedTime={editedDate}
+    tags={frontmatter.tags}
 >
+    <script
+        type="application/ld+json"
+        set:html={JSON.stringify(structuredData)}
+        slot="structured-data"
+    />
     <Header activeNav={frontmatter.activeNav} />
     <Breadcrumbs shortTitle={frontmatter.shortTitle} />
     <main class="mywidth:grid">
@@ -75,7 +105,7 @@ const editedDate =
                     <h1 class="my-8" set:html={renderInlineMarkdown(frontmatter.title)} />
                     {
                         frontmatter.subtitle && (
-                            <h5 set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                            <h2 class="subtitle" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
                         )
                     }
                     <div class="flex items-center">
@@ -134,7 +164,7 @@ const editedDate =
     }
 
     .subtitle {
-        @apply text-base font-normal text-ctp-rosewater;
+        @apply text-base font-normal italic text-ctp-lavender;
     }
 
     .subtitle :global(strong),
