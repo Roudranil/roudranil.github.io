@@ -9,7 +9,7 @@
         "preview": "astro preview",
         "astro": "astro",
         "sync-resume": "chmod +x scripts/sync-resume.sh && bash scripts/sync-resume.sh",
-        "create": "bash scripts/create.sh --"
+        "create": "bash scripts/create.sh"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.10",
