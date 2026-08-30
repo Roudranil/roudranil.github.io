@@ -1,6 +1,6 @@
 ---
 import "@styles/base.css";
-import { SITE } from "@config";
+import { SITE, SOCIALS } from "@config";
 import Header from "@components/Header.astro";
 import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "@components/TableOfContents.astro";
@@ -14,9 +14,22 @@ export interface Props {
     headings: [];
 }
 const { frontmatter, headings } = Astro.props;
+
+const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.website,
+    sameAs: SOCIALS.filter((s) => s.active && s.name !== "Mail").map((s) => s.href),
+};
 ---
 
-<BaseLayout title={`${frontmatter.title} | ${SITE.title}`}>
+<BaseLayout title={`${frontmatter.title} | ${SITE.title}`} description={frontmatter.description}>
+    <script
+        type="application/ld+json"
+        set:html={JSON.stringify(structuredData)}
+        slot="structured-data"
+    />
     <Header activeNav="about" />
     <Breadcrumbs />
     <main>
