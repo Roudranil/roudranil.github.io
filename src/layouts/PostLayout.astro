@@ -80,15 +80,15 @@ const editedDate =
                     }
                     <div class="flex items-center">
                         <h5>
-                            <span><span class="font-mono text-ctp-lavender">&nbsp;</span><time datetime={date.toISOString()}>
+                            <span><span class="font-mono text-ctp-lavender">&nbsp;</span> Published on <time datetime={date.toISOString()}>
                                 {date.toLocaleDateString(undefined, dateOptions)}
-                            </time></span>
+                            </time></span><span class="font-mono">&middot;</span>
                             {
                                 editedDate && (
                                     <>
                                         {" "}
-                                        <span class="not-italic">(</span>last edited on{" "}
-                                        <time datetime={editedDate.toISOString()}>{editedDate.toLocaleDateString(undefined, dateOptions)}</time><span class="not-italic">)</span>
+                                        Last Updated on {" "}
+                                        <time datetime={editedDate.toISOString()}>{editedDate.toLocaleDateString(undefined, dateOptions)}</time>
                                     </>
                                 )
                             }
