@@ -1,82 +1,85 @@
 ---
 import "@styles/base.css";
-import { mixCtpColor } from "@utils/colorMix";
 
 export interface Props {
     type: "info" | "alert" | "tip" | "normal";
+    title?: string;
 }
-const { type } = Astro.props;
-
-const MIX_WEIGHT = 60;
+const { type, title } = Astro.props;
 
 const titles = {
     info: {
-        symbol: "   ",
+        symbol: "",
         text: "Information",
-        bg: "bg-ctp-frappe-sky",
-        accent: "border-l-ctp-latte-sky",
-        colorVar: "latte-sky",
-        mixTowards: "black",
+        border: "border-ctp-frappe-sky",
+        accent: "border-t-ctp-sky",
+        titleColor: "text-ctp-sky",
     },
     alert: {
-        symbol: "   ",
+        symbol: "",
         text: "Warning",
-        bg: "bg-ctp-frappe-red",
-        accent: "border-l-ctp-latte-red",
-        colorVar: "latte-red",
-        mixTowards: "black",
+        border: "border-ctp-frappe-red",
+        accent: "border-t-ctp-red",
+        titleColor: "text-ctp-red",
     },
     tip: {
         symbol: "󱐌",
         text: "Tip",
-        bg: "bg-ctp-frappe-green",
-        accent: "border-l-ctp-latte-green",
-        colorVar: "latte-green",
-        mixTowards: "black",
+        border: "border-ctp-frappe-green",
+        accent: "border-t-ctp-green",
+        titleColor: "text-ctp-green",
     },
     normal: {
-        symbol: "󰎚 ",
+        symbol: "󰎚",
         text: "Note",
-        bg: "bg-ctp-frappe-surface1",
-        accent: "border-l-ctp-latte-surface1",
-        colorVar: "latte-surface1",
-        mixTowards: "white",
+        border: "border-ctp-frappe-overlay2",
+        accent: "border-t-ctp-overlay2",
+        titleColor: "text-ctp-overlay2",
     },
 } as Record<
     string,
     {
         symbol: string;
         text: string;
-        bg: string;
+        border: string;
         accent: string;
-        colorVar: string;
-        mixTowards: "black" | "white";
+        titleColor: string;
     }
 >;
-
-const titleColor = mixCtpColor(titles[type].colorVar, MIX_WEIGHT, titles[type].mixTowards);
 ---
 
 <div
     id="Block"
-    class=`${titles[type].bg} ${titles[type].accent} my-8 rounded-md border-l-8 border-transparent`
+    class=`${titles[type].border} ${titles[type].accent} relative my-8 rounded-xl border border-t-8 bg-transparent`
 >
-    <p class="block-title" style={{ color: titleColor }}>
-        <span class="font-mono">{titles[type].symbol}</span>
-        <span class="font-bold">{titles[type].text}</span>
+    <p class=`block-title ${titles[type].titleColor}`>
+        <span class="inline-block w-6 text-center font-mono">{titles[type].symbol}</span>
+        <span class="font-bold">{title ?? titles[type].text}</span>
     </p>
-    <p class="text" style={{ color: titleColor }}>
+    <div class=`text ${titles[type].titleColor}`>
         <slot />
-    </p>
+    </div>
 </div>
 
 <style>
     @reference "@styles/base.css";
     .block-title {
-        @apply m-0 mb-2 p-4 pb-0 text-lg;
+        @apply absolute -top-5 left-4 m-0 bg-ctp-base px-2 text-lg;
     }
 
     .text {
-        @apply m-0 p-4 pt-0;
+        @apply m-0 p-4 pt-6;
+    }
+
+    .text > :global(:first-child) {
+        margin-top: 0;
+    }
+
+    .text > :global(:last-child) {
+        margin-bottom: 0;
+    }
+
+    .text :global(.expressive-code) {
+        @apply mb-4 text-ctp-text;
     }
 </style>

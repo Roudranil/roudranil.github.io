@@ -18,7 +18,8 @@ export interface TOCNode extends TOCHeading {
  * to render an authentic ASCII tree at arbitrary depth.
  *
  * Markdown bodies are assumed to start at h2 — h1 is reserved for the
- * layout-injected page title (see docs/quirks.md).
+ * layout-injected page title (see docs/quirks.md). Headings deeper than
+ * h4 are dropped — the ToC only tracks depth up to h4.
  */
 export function buildTOC(headings: TOCHeading[]): TOCNode[] {
     if (!headings || headings.length === 0) return [];
@@ -26,16 +27,18 @@ export function buildTOC(headings: TOCHeading[]): TOCNode[] {
     const toc: TOCNode[] = [];
     const parentHeadings = new Map<number, TOCNode>();
 
-    headings.forEach((h) => {
-        const heading: TOCNode = { ...h, subheadings: [], prefix: "", connector: "" };
-        parentHeadings.set(heading.depth, heading);
-        // Change 2 to 1 if your markdown includes your <h1>
-        if (heading.depth === 2) {
-            toc.push(heading);
-        } else {
-            parentHeadings.get(heading.depth - 1)?.subheadings.push(heading);
-        }
-    });
+    headings
+        .filter((h) => h.depth <= 4)
+        .forEach((h) => {
+            const heading: TOCNode = { ...h, subheadings: [], prefix: "", connector: "" };
+            parentHeadings.set(heading.depth, heading);
+            // Change 2 to 1 if your markdown includes your <h1>
+            if (heading.depth === 2) {
+                toc.push(heading);
+            } else {
+                parentHeadings.get(heading.depth - 1)?.subheadings.push(heading);
+            }
+        });
 
     assignTreePrefixes(toc, "");
     return toc;

@@ -166,11 +166,6 @@
         width: auto;
     }
 
-    .prose th {
-        font-weight: bold;
-        color: var(--color-ctp-lavender);
-    }
-
     .prose :is(th, td) {
         padding: 8px 12px;
         text-align: center;
@@ -262,6 +257,12 @@
    the gap between two lines of body text, not the full line-height. */
 .prose :is(h1, h2, h3, h4, h5, h6) {
     margin-bottom: calc(var(--font-size-base) * 0.5);
+}
+
+.prose th {
+    font-weight: bold;
+    font-size: var(--text-base);
+    color: var(--catppuccin-color-lavender);
 }
 
 .prose h1 {
