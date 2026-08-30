@@ -5,6 +5,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import rehypeExpressiveCode from "rehype-expressive-code";
+import rehypeExternalLinks from "rehype-external-links";
 import tailwindcss from "@tailwindcss/vite";
 
 import mdx from "@astrojs/mdx";
@@ -56,6 +57,13 @@ export default defineConfig({
                 ],
                 rehypeKatex,
                 [rehypeExpressiveCode, expressiveCodeConfig],
+                [
+                    rehypeExternalLinks,
+                    {
+                        target: "_blank",
+                        rel: ["noopener", "noreferrer"],
+                    },
+                ],
             ],
         }),
     },
