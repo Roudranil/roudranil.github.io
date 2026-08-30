@@ -10,6 +10,7 @@ import type { AITool } from "types";
 import aiTools from "@assets/aitools";
 import { renderInlineMarkdown, stripInlineMarkdown } from "@utils/inlineMarkdown";
 import type { TOCHeading } from "@utils/toc";
+import { mixCtpColor } from "@utils/colorMix";
 
 // Basically there may be cases where i would want the heading text to be something else in the toc
 // in that case, send the entire heading array manually from the frontmatter itself
@@ -46,6 +47,7 @@ if (frontmatter.headings && frontmatter.headings.length > 0) {
     headings = propsheadings;
 }
 const date = new Date(frontmatter.date);
+const dimLavender = mixCtpColor("lavender", 65, "black");
 const editedDate =
     lastEdited != null && lastEdited.toDateString() !== date.toDateString() ? lastEdited : null;
 
@@ -108,11 +110,14 @@ const structuredData = {
                     <div class="post-meta">
                     {
                         frontmatter.subtitle && (
-                            <h5 class="font-bold" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                            <div class="font-bold mb-4 mt-4 text-lg" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
                         )
                     }
-                    <h5>
-                        <span><span class="font-mono text-ctp-lavender">&nbsp;</span> Published on <time datetime={date.toISOString()}>
+                    {
+                        frontmatter.github && <GithubLink githubURL={frontmatter.github} />
+                    }
+                    <div class="mb-0 mt-0 text-ctp-subtext0">
+                        <span><span class="font-mono">&nbsp;</span> Published on <time datetime={date.toISOString()}>
                             {date.toLocaleDateString(undefined, dateOptions)}
                         </time></span>
                         {
@@ -124,13 +129,11 @@ const structuredData = {
                                 </>
                             )
                         }
-                    </h5>
-                    {
-                        frontmatter.github && <GithubLink githubURL={frontmatter.github} />
-                    }
+                    </div>
+                    
                     {
                         frontmatter.ai_use && frontmatter.ai_use.length > 0 && (
-                            <p class="ai-use-notice mt-0 text-left text-base text-ctp-overlay0">
+                            <p class="ai-use-notice mt-0 text-left text-base text-ctp-subtext0">
                                 {frontmatter.ai_use.map((tool: AITool, i: number) => (
                                     <>
                                         {i > 0 && ", "}
@@ -156,16 +159,12 @@ const structuredData = {
 <style>
     @reference "@styles/base.css";
     h5 {
-        @apply italic text-ctp-lavender text-base mb-0;
+        @apply text-ctp-lavender text-base;
     }
 
     h5 :global(strong),
     h5 :global(code) {
         color: inherit;
-    }
-
-    .not-italic {
-        @apply not-italic;
     }
 
     .ai-use-notice :global(svg) {

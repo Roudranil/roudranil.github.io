@@ -10,5 +10,5 @@ export function mixCtpColor(
     weight: number,
     towards: "black" | "white" = "black",
 ): string {
-    return `color-mix(in srgb, var(--color-ctp-${colorVar}) ${weight}%, ${towards})`;
+    return `color-mix(in srgb, var(--catppuccin-color-${colorVar}) ${weight}%, ${towards})`;
 }
