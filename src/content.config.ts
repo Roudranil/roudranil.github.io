@@ -1,4 +1,5 @@
-import { z, defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 
 const baseSchema = z.object({
@@ -11,7 +12,7 @@ const baseSchema = z.object({
     activeNav: z.enum(["~", "about", "projects", "posts", "contact"]),
     shortTitle: z.string().optional(),
     // hidden seo metadata (article:tag / json-ld keywords) - not a visible tag/browse feature
-    tags: z.array(z.string()).optional(),
+    seo_keywords: z.array(z.string()).optional(),
     headings: z
         .array(
             z.object({
@@ -22,6 +23,7 @@ const baseSchema = z.object({
         )
         .optional(),
     ai_use: z.array(z.enum(["gpt", "claude", "gemini", "grok", "qwen", "deepseek"])).optional(),
+    github: z.string().optional(),
 });
 
 const postsCollection = defineCollection({
@@ -31,9 +33,7 @@ const postsCollection = defineCollection({
 
 const projectsCollection = defineCollection({
     loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
-    schema: baseSchema.extend({
-        github: z.string().optional(),
-    }),
+    schema: baseSchema
 });
 
 export const collections = {
