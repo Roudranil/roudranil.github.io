@@ -1,5 +1,6 @@
 export type Site = {
     website: string;
+    repo: string;
     author: string;
     desc: string;
     title: string;

@@ -1,5 +1,6 @@
 ---
 import Socials from "./Socials.astro";
+import { SITE } from "@config";
 
 const gitHash = import.meta.env.PUBLIC_GIT_HASH;
 const gitBranch = import.meta.env.PUBLIC_GIT_BRANCH;
@@ -21,7 +22,7 @@ const branchIcon = "";
                         <span class="separator">&middot;</span>
                         <a
                             class="git-info"
-                            href={`https://github.com/Roudranil/roudranil.github.io/tree/${gitHash}`}
+                            href={`${SITE.repo}/tree/${gitHash}`}
                         >
                             <span class="branch-icon">{branchIcon}</span>
                             {gitHash}
