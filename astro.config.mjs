@@ -32,6 +32,7 @@ const expressiveCodeConfig = {
 
 export default defineConfig({
     site: "https://roudranil.github.io",
+    trailingSlash: "never",
     compressHTML: true,
     markdown: {
         syntaxHighlight: false,
