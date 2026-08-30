@@ -139,7 +139,10 @@
     }
 
     .page-title {
-        @apply font-bold text-2xl text-ctp-rosewater my-8;
+        @apply font-extrabold mb-8;
+        font-size: var(--font-size-3xl);
+        color: var(--catppuccin-color-red);
+        margin-top: 1rem;
     }
 
     .prose {
@@ -276,6 +279,7 @@
     /* matches TableOfContents.astro's mt-4 gap under the breadcrumb nav,
        so h1 and the "Table of Contents" label line up across the grid */
     margin-top: 1rem;
+    font-family: var(--font-serif);
 }
 
 .prose h2 {

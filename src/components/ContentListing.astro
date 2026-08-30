@@ -1,0 +1,186 @@
+---
+// ContentListing.astro
+// Renders a collection's index page as year-grouped blocks: a year label,
+// a thin low-alpha rule, then one block per entry — big rosewater title,
+// optional subtitle, then a date line with the entry's git blob link.
+import { GITHUB_ICON, type YearGroup } from "@utils/listing";
+import { renderInlineMarkdown } from "@utils/inlineMarkdown";
+import "@styles/base.css";
+
+export interface Props {
+    groups: YearGroup[];
+}
+
+const { groups } = Astro.props;
+
+const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+};
+
+function formatDate(date: Date): string {
+    return date.toLocaleDateString(undefined, dateOptions);
+}
+---
+
+<div class="listing">
+    {
+        groups.map((group) => (
+            <section class="year-group">
+                <h2 class="year-label">{group.year}</h2>
+                <hr class="year-rule" />
+                {group.rows.map((row) => {
+                    const modified =
+                        row.modified && row.modified.toDateString() !== row.created.toDateString()
+                            ? row.modified
+                            : null;
+                    return (
+                        <article class="entry">
+                            <a
+                                class="entry-title"
+                                href={row.url}
+                                set:html={renderInlineMarkdown(row.title)}
+                            />
+                            {row.subtitle && (
+                                <p
+                                    class="entry-subtitle"
+                                    set:html={renderInlineMarkdown(row.subtitle)}
+                                />
+                            )}
+                            <p class="entry-meta">
+                                <span class="font-mono">&nbsp;</span> Published on{" "}
+                                <time datetime={row.created.toISOString()}>
+                                    {formatDate(row.created)}
+                                </time>
+                                {modified && (
+                                    <>
+                                        <span class="font-mono">&middot;</span> Last Updated on{" "}
+                                        <time datetime={modified.toISOString()}>
+                                            {formatDate(modified)}
+                                        </time>
+                                    </>
+                                )}
+                                {row.gitUrl && (
+                                    <>
+                                        <span class="font-mono">&middot;</span>
+                                        <a
+                                            class="entry-git"
+                                            href={row.gitUrl}
+                                            title={row.gitUrl}
+                                        >
+                                            {GITHUB_ICON}
+                                        </a>
+                                    </>
+                                )}
+                            </p>
+                        </article>
+                    );
+                })}
+            </section>
+        ))
+    }
+</div>
+
+<style>
+    @reference "@styles/base.css";
+
+    /* every knob below is parameterised so the design can be retuned
+       without touching markup — see docs/styling.md for the token list. */
+    .listing {
+        /* x = leading between two body-text lines, matches base.css's
+           `.prose :is(h1..h6) { margin-bottom: ... }` rule */
+        --listing-gap-x: calc(var(--font-size-base) * 0.2);
+        /* y, slightly greater than x — title→subtitle→date gaps */
+        --listing-gap-y: calc(var(--font-size-base) * 0.4);
+        --listing-entry-gap: 3rem;
+        --listing-group-gap: 3rem;
+
+        --listing-year-size: var(--font-size-base);
+        --listing-year-color: var(--catppuccin-color-subtext0);
+        --listing-rule-color: var(--catppuccin-color-surface1);
+        --listing-rule-alpha: 40%;
+
+        --listing-title-size: var(--font-size-xl);
+        --listing-title-color: var(--catppuccin-color-rosewater);
+        --listing-title-hover-color: var(--catppuccin-color-sapphire);
+        --listing-title-weight: 400;
+
+        --listing-subtitle-size: var(--font-size-base);
+        --listing-subtitle-color: var(--catppuccin-color-text);
+
+        --listing-meta-size: var(--font-size-sm);
+        --listing-meta-color: var(--catppuccin-color-subtext0);
+
+        --listing-git-color: var(--catppuccin-color-subtext0);
+        --listing-git-hover-color: var(--color-dark-sapphire);
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--listing-group-gap);
+        margin-top: 1rem;
+    }
+
+    .year-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .year-label {
+        font-family: var(--font-sans);
+        font-size: var(--listing-year-size);
+        font-weight: 400;
+        color: var(--listing-year-color);
+        margin: 0;
+    }
+
+    .year-rule {
+        border: 0;
+        border-top: 1px solid
+            color-mix(in srgb, var(--listing-rule-color) var(--listing-rule-alpha), transparent);
+        margin: calc(var(--listing-gap-x) * 0.5) 0 calc(var(--listing-entry-gap) * 0.75) 0;
+    }
+
+    .entry + .entry {
+        margin-top: var(--listing-entry-gap);
+    }
+
+    .entry-title {
+        display: block;
+        font-family: var(--font-serif);
+        font-size: var(--listing-title-size);
+        font-weight: var(--listing-title-weight);
+        color: var(--listing-title-color);
+        overflow-wrap: break-word;
+    }
+
+    .entry-title:hover {
+        color: var(--listing-title-hover-color);
+        text-decoration-line: underline;
+    }
+
+    .entry-subtitle {
+        font-family: var(--font-sans);
+        font-size: var(--listing-subtitle-size);
+        font-weight: 400;
+        color: var(--listing-subtitle-color);
+        overflow-wrap: break-word;
+        margin: var(--listing-gap-y) 0 0 0;
+    }
+
+    .entry-meta {
+        font-size: var(--listing-meta-size);
+        color: var(--listing-meta-color);
+        overflow-wrap: break-word;
+        margin: var(--listing-gap-y) 0 0 0;
+    }
+
+    .entry-git {
+        color: var(--listing-git-color);
+        transition: color 100ms;
+    }
+
+    .entry-git:hover {
+        color: var(--listing-git-hover-color);
+    }
+</style>
