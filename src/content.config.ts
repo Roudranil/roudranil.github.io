@@ -3,12 +3,15 @@ import { glob } from "astro/loaders";
 
 const baseSchema = z.object({
     title: z.string(),
-    description: z.string().optional(),
+    // aim for ~150-160 chars: this is roughly where google truncates search snippets
+    description: z.string(),
     subtitle: z.string().optional(),
     date: z.date(),
     draft: z.boolean(),
     activeNav: z.enum(["~", "about", "projects", "posts", "contact"]),
     shortTitle: z.string().optional(),
+    // hidden seo metadata (article:tag / json-ld keywords) - not a visible tag/browse feature
+    tags: z.array(z.string()).optional(),
     headings: z
         .array(
             z.object({
