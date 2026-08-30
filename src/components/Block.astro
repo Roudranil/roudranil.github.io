@@ -1,39 +1,46 @@
 ---
 import "@styles/base.css";
+import { mixCtpColor } from "@utils/colorMix";
 
 export interface Props {
     type: "info" | "alert" | "tip" | "normal";
 }
 const { type } = Astro.props;
 
+const MIX_WEIGHT = 60;
+
 const titles = {
     info: {
         symbol: "   ",
         text: "Information",
-        bg: "bg-info-bg",
-        accent: "border-l-info-accent",
-        titletext: "text-info-titletext",
+        bg: "bg-ctp-frappe-sky",
+        accent: "border-l-ctp-latte-sky",
+        colorVar: "latte-sky",
+        mixTowards: "black",
     },
     alert: {
         symbol: "   ",
         text: "Warning",
-        bg: "bg-alert-bg",
-        accent: "border-l-alert-accent",
-        titletext: "text-alert-titletext",
+        bg: "bg-ctp-frappe-red",
+        accent: "border-l-ctp-latte-red",
+        colorVar: "latte-red",
+        mixTowards: "black",
     },
     tip: {
         symbol: "󱐌",
         text: "Tip",
-        bg: "bg-tip-bg",
-        accent: "border-l-tip-accent",
-        titletext: "text-tip-titletext",
+        bg: "bg-ctp-frappe-green",
+        accent: "border-l-ctp-latte-green",
+        colorVar: "latte-green",
+        mixTowards: "black",
     },
     normal: {
-        symbol: "",
-        text: "",
-        bg: "bg-ctp-base",
-        accent: "border-l-ctp-subtext1",
-        titletext: "",
+        symbol: "󰎚 ",
+        text: "Note",
+        bg: "bg-ctp-frappe-surface1",
+        accent: "border-l-ctp-latte-surface1",
+        colorVar: "latte-surface1",
+        mixTowards: "white",
     },
 } as Record<
     string,
@@ -42,24 +49,23 @@ const titles = {
         text: string;
         bg: string;
         accent: string;
-        titletext: string;
+        colorVar: string;
+        mixTowards: "black" | "white";
     }
 >;
+
+const titleColor = mixCtpColor(titles[type].colorVar, MIX_WEIGHT, titles[type].mixTowards);
 ---
 
 <div
     id="Block"
     class=`${titles[type].bg} ${titles[type].accent} my-8 rounded-md border-l-8 border-transparent`
 >
-    <p class=`block-title ${titles[type].titletext}`>
+    <p class="block-title" style={{ color: titleColor }}>
         <span class="font-mono">{titles[type].symbol}</span>
         <span class="font-bold">{titles[type].text}</span>
     </p>
-    <p
-        class={`text ${
-            type === "normal" ? "text-ctp-text" : "text-ctp-mantle"
-        }`}
-    >
+    <p class="text" style={{ color: titleColor }}>
         <slot />
     </p>
 </div>
