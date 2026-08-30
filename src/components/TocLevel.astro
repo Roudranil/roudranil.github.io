@@ -10,7 +10,7 @@
 // own connector renders as BLANK (invisible), and it never affects which
 // real heading gets buildTOC's LAST glyph — see docs/aesthetic.md.
 import type { TOCNode } from "@utils/toc";
-import { PIPE, BLANK, WRAP_CONTINUATION_LINES, EXPAND_ICON, COLLAPSE_ICON } from "@utils/toc";
+import { BLANK, WRAP_CONTINUATION_LINES, EXPAND_ICON, COLLAPSE_ICON } from "@utils/toc";
 import "@styles/base.css";
 
 export interface Props {
@@ -26,12 +26,14 @@ const { nodes, prefix } = Astro.props;
 const toggleGlyph = prefix + BLANK;
 
 /**
- * Continuation lines drawn behind a wrapped heading — the ancestor prefix
- * repeated so the "│" columns keep running once the text wraps past one
- * line. See docs/aesthetic.md for why this stays content-based, not CSS.
+ * Continuation lines drawn behind a wrapped heading — the node's own
+ * childPrefix repeated so the "│" columns keep running once the text wraps
+ * past one line. childPrefix already resolves to BLANK for a last sibling,
+ * so its own column terminates instead of drawing a dangling "│" below its
+ * corner. See docs/aesthetic.md for why this stays content-based, not CSS.
  */
-function continuationFor(nodePrefix: string): string {
-    return Array(WRAP_CONTINUATION_LINES).fill(nodePrefix + PIPE).join("\n");
+function continuationFor(childPrefix: string): string {
+    return Array(WRAP_CONTINUATION_LINES).fill(childPrefix).join("\n");
 }
 ---
 
@@ -46,7 +48,7 @@ function continuationFor(nodePrefix: string): string {
                                 {/* zero whitespace between these tags — .toc-gutter has white-space:
                                     pre, so any newline/indent between children would be preserved as
                                     its own visible blank line instead of collapsing. See docs/quirks.md. */}
-                                <span class="toc-gutter" aria-hidden="true"><span class="toc-glyph">{node.prefix + node.connector}</span><span class="toc-cont">{continuationFor(node.prefix)}</span></span>
+                                <span class="toc-gutter" aria-hidden="true"><span class="toc-glyph">{node.prefix + node.connector}</span><span class="toc-cont">{continuationFor(node.childPrefix)}</span></span>
                                 <a class="toc-link" href={`#${node.slug}`} data-toc-slug={node.slug}>{node.text}</a>
                             </div>
                             {node.subheadings.length > 0 && (
