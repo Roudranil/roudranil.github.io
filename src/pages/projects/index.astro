@@ -2,45 +2,28 @@
 import "@styles/base.css";
 import { SITE } from "@config";
 import Header from "@components/Header.astro";
-import Card from "@components/Card.astro";
+import ContentListing from "@components/ContentListing.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-
-// const projects = await Astro.glob("./*.md");
 import { getCollection } from "astro:content";
+import { buildListRows, groupRowsByYear } from "@utils/listing";
+
 const projects = await getCollection("projects", ({ data }) => {
     return data.draft !== true;
 });
-
-// convert date from string to date objects
-projects.forEach((p) => {
-    p.data.date = new Date(p.data.date);
-});
-projects.sort((a, b) => (b.data.date as any) - (a.data.date as any));
+const groups = groupRowsByYear(buildListRows(projects, "/projects"));
 ---
 
-<!-- 
+<!--
     This file is used to generate the index page for the projects section
 -->
 <BaseLayout title={`Projects | ${SITE.title}`}>
     <Header activeNav="projects" />
     <Breadcrumbs />
     <main>
-        <section id="contact" class="mx-auto max-w-3xl px-4">
+        <section id="projects" class="mx-auto max-w-3xl px-4">
             <h1 class="page-title">Projects</h1>
-
-            <p>Here are some of the projects that I have done till date</p>
-            <ul>
-                {
-                    projects.map((project) => (
-                        <Card
-                            title={project.data.title}
-                            date={project.data.date}
-                            url={`/projects/${project.id}`}
-                        />
-                    ))
-                }
-            </ul>
+            <ContentListing groups={groups} />
         </section>
     </main>
 </BaseLayout>

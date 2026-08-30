@@ -2,45 +2,28 @@
 import "@styles/base.css";
 import { SITE } from "@config";
 import Header from "@components/Header.astro";
-import Card from "@components/Card.astro";
+import ContentListing from "@components/ContentListing.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-
-// const posts = await Astro.glob("./*.md");
 import { getCollection } from "astro:content";
+import { buildListRows, groupRowsByYear } from "@utils/listing";
+
 const posts = await getCollection("posts", ({ data }) => {
     return data.draft !== true;
 });
-
-// convert date from string to date objects
-posts.forEach((p) => {
-    p.data.date = new Date(p.data.date);
-});
-posts.sort((a, b) => (b.data.date as any) - (a.data.date as any));
+const groups = groupRowsByYear(buildListRows(posts, "/posts"));
 ---
 
-<!-- 
+<!--
     This file is used to generate the index page for the posts section
 -->
 <BaseLayout title={`Posts | ${SITE.title}`}>
     <Header activeNav="posts" />
     <Breadcrumbs />
     <main>
-        <section id="contact" class="mx-auto max-w-3xl px-4">
+        <section id="posts" class="mx-auto max-w-3xl px-4">
             <h1 class="page-title">Posts</h1>
-
-            <p>Here are some of my posts</p>
-            <ul>
-                {
-                    posts.map((post) => (
-                        <Card
-                            title={post.data.title}
-                            date={post.data.date}
-                            url={`/posts/${post.id}`}
-                        />
-                    ))
-                }
-            </ul>
+            <ContentListing groups={groups} />
         </section>
     </main>
 </BaseLayout>

@@ -2,8 +2,9 @@ import type { Site, MenuItem, SocialObjects } from "types";
 
 export const SITE: Site = {
     website: "https://roudranil.github.io",
+    repo: "https://github.com/Roudranil/roudranil.github.io",
     author: "Roudranil Das",
-    desc: "My portfolio",
+    desc: "Roudranil Das's personal site — posts and projects on machine learning, engineering, and math.",
     title: "rudy",
     lightAndDarkMode: false,
     postPerPage: 5,

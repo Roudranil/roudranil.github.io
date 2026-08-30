@@ -3,74 +3,83 @@ import "@styles/base.css";
 
 export interface Props {
     type: "info" | "alert" | "tip" | "normal";
+    title?: string;
 }
-const { type } = Astro.props;
+const { type, title } = Astro.props;
 
 const titles = {
     info: {
-        symbol: "   ",
+        symbol: "",
         text: "Information",
-        bg: "bg-info-bg",
-        accent: "border-l-info-accent",
-        titletext: "text-info-titletext",
+        border: "border-ctp-frappe-sky",
+        accent: "border-t-ctp-sky",
+        titleColor: "text-ctp-sky",
     },
     alert: {
-        symbol: "   ",
+        symbol: "",
         text: "Warning",
-        bg: "bg-alert-bg",
-        accent: "border-l-alert-accent",
-        titletext: "text-alert-titletext",
+        border: "border-ctp-frappe-red",
+        accent: "border-t-ctp-red",
+        titleColor: "text-ctp-red",
     },
     tip: {
         symbol: "󱐌",
         text: "Tip",
-        bg: "bg-tip-bg",
-        accent: "border-l-tip-accent",
-        titletext: "text-tip-titletext",
+        border: "border-ctp-frappe-green",
+        accent: "border-t-ctp-green",
+        titleColor: "text-ctp-green",
     },
     normal: {
-        symbol: "",
-        text: "",
-        bg: "bg-ctp-base",
-        accent: "border-l-ctp-subtext1",
-        titletext: "",
+        symbol: "󰎚",
+        text: "Note",
+        border: "border-ctp-frappe-overlay2",
+        accent: "border-t-ctp-overlay2",
+        titleColor: "text-ctp-overlay2",
     },
 } as Record<
     string,
     {
         symbol: string;
         text: string;
-        bg: string;
+        border: string;
         accent: string;
-        titletext: string;
+        titleColor: string;
     }
 >;
 ---
 
 <div
     id="Block"
-    class=`${titles[type].bg} ${titles[type].accent} my-8 rounded-md border-l-8 border-transparent`
+    class=`${titles[type].border} ${titles[type].accent} relative my-8 rounded-xl border border-t-8 bg-transparent`
 >
-    <p class=`block-title ${titles[type].titletext}`>
-        <span class="font-mono">{titles[type].symbol}</span>
-        <span class="font-bold">{titles[type].text}</span>
+    <p class=`block-title ${titles[type].titleColor}`>
+        <span class="inline-block w-6 text-center font-mono">{titles[type].symbol}</span>
+        <span class="font-bold">{title ?? titles[type].text}</span>
     </p>
-    <p
-        class={`text ${
-            type === "normal" ? "text-ctp-text" : "text-ctp-mantle"
-        }`}
-    >
+    <div class=`text ${titles[type].titleColor}`>
         <slot />
-    </p>
+    </div>
 </div>
 
 <style>
     @reference "@styles/base.css";
     .block-title {
-        @apply m-0 mb-2 p-4 pb-0 text-lg;
+        @apply absolute -top-5 left-4 m-0 bg-ctp-base px-2 text-lg;
     }
 
     .text {
-        @apply m-0 p-4 pt-0;
+        @apply m-0 p-4 pt-6;
+    }
+
+    .text > :global(:first-child) {
+        margin-top: 0;
+    }
+
+    .text > :global(:last-child) {
+        margin-bottom: 0;
+    }
+
+    .text :global(.expressive-code) {
+        @apply mb-4 text-ctp-text;
     }
 </style>

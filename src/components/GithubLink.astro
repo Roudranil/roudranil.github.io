@@ -1,14 +1,29 @@
 ---
+interface Props {
+    githubURL: string;
+}
+
 const { githubURL } = Astro.props;
+
+function getRepoLabel(url: string): string {
+    try {
+        const segments = new URL(url).pathname.split("/").filter(Boolean);
+        return segments.length >= 2 ? `${segments[0]}/${segments[1]}` : "Github";
+    } catch {
+        return "Github";
+    }
+}
+
+const repoLabel = getRepoLabel(githubURL);
 ---
 
 <div class="github-div">
-    <a href={githubURL} title={githubURL} class="not-prose">  &nbsp;Github</a>
+    <a href={githubURL} title={githubURL} class="not-prose">  &nbsp;{repoLabel}</a>
 </div>
 
 <style>
     @reference "@styles/base.css";
     .github-div {
-        @apply w-fit rounded-3xl border border-transparent bg-ctp-surface1 px-3 text-ctp-lavender transition duration-100 hover:bg-ctp-surface0 hover:text-dark-sapphire;
+        @apply w-fit text-ctp-lavender text-base transition duration-100 hover:text-dark-sapphire;
     }
 </style>

@@ -1,8 +1,11 @@
 import { defineConfig } from "astro/config";
 import { unified } from "@astrojs/markdown-remark";
 import remarkMath from "remark-math";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import rehypeExpressiveCode from "rehype-expressive-code";
+import rehypeExternalLinks from "rehype-external-links";
 import tailwindcss from "@tailwindcss/vite";
 
 import mdx from "@astrojs/mdx";
@@ -32,12 +35,36 @@ const expressiveCodeConfig = {
 
 export default defineConfig({
     site: "https://roudranil.github.io",
+    trailingSlash: "never",
     compressHTML: true,
     markdown: {
         syntaxHighlight: false,
         processor: unified({
             remarkPlugins: [remarkMath],
-            rehypePlugins: [rehypeKatex, [rehypeExpressiveCode, expressiveCodeConfig]],
+            rehypePlugins: [
+                rehypeSlug,
+                [
+                    rehypeAutolinkHeadings,
+                    {
+                        behavior: "append",
+                        test: (element) => element.tagName !== "h1",
+                        properties: {
+                            className: ["heading-anchor"],
+                            ariaLabel: "Link to this heading",
+                        },
+                        content: { type: "text", value: "#" },
+                    },
+                ],
+                rehypeKatex,
+                [rehypeExpressiveCode, expressiveCodeConfig],
+                [
+                    rehypeExternalLinks,
+                    {
+                        target: "_blank",
+                        rel: ["noopener", "noreferrer"],
+                    },
+                ],
+            ],
         }),
     },
     integrations: [

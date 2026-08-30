@@ -11,6 +11,11 @@ export interface Props {
     author?: string;
     description?: string;
     canonicalURL?: string;
+    image?: string;
+    type?: "website" | "article";
+    publishedTime?: Date;
+    modifiedTime?: Date | null;
+    seo_keywords?: string[];
 }
 
 const {
@@ -18,7 +23,14 @@ const {
     author = SITE.author,
     description = SITE.desc,
     canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+    image = "/og-image.png",
+    type = "website",
+    publishedTime,
+    modifiedTime,
+    seo_keywords,
 } = Astro.props;
+
+const ogImageURL = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
@@ -39,6 +51,52 @@ const {
         <meta name="description" content={description} />
         <meta name="author" content={author} />
         <link rel="sitemap" href="/sitemap-index.xml" />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title={SITE.title}
+            href="/rss.xml"
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content={type} />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImageURL} />
+        <meta property="og:site_name" content={SITE.title} />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageURL} />
+
+        {
+            // article-specific open graph tags; only meaningful when type="article" (post pages)
+            type === "article" && publishedTime && (
+                <meta
+                    property="article:published_time"
+                    content={publishedTime.toISOString()}
+                />
+            )
+        }
+        {
+            type === "article" &&
+                modifiedTime &&
+                modifiedTime.toISOString() !== publishedTime?.toISOString() && (
+                    <meta
+                        property="article:modified_time"
+                        content={modifiedTime.toISOString()}
+                    />
+                )
+        }
+        {
+            type === "article" &&
+                seo_keywords ?.map((tag) => <meta property="article:tag" content={tag} />)
+        }
+
+        <slot name="structured-data" />
         <!-- Pre load backup google fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,23 +144,46 @@ const {
         <ClientRouter />
     </head>
     <body>
+        <!-- <div id="scrolltotop-wrap">
+            <button id="scrolltotop" title="Scroll to Top"
+                ><span class="font-mono">󰁝</span></button
+            >
+        </div> -->
         <slot />
-        <button onclick="topFunction()" id="scrolltotop" title="Scroll to Top"
-            >^</button
-        >
         <Footer />
-        <style>
+        <!-- <style>
     @reference "@styles/base.css";
-            #scrolltotop {
-                @apply fixed bottom-5 right-7 z-99 hidden h-16 cursor-pointer rounded-2xl border border-none bg-ctp-surface1 p-2 text-xl text-ctp-red opacity-75 outline-hidden transition duration-200 hover:bg-ctp-surface0 hover:text-ctp-sapphire sm:text-4xl;
+            #scrolltotop-wrap {
+                position: sticky;
+                top: 0;
+                height: 0;
             }
-        </style>
+            #scrolltotop {
+                @apply absolute z-99 h-12 w-12 flex items-center justify-center hidden leading-none cursor-pointer rounded-full border border-none bg-ctp-surface1 text-lg text-ctp-red opacity-75 outline-hidden transition duration-200 hover:bg-ctp-surface0 hover:text-ctp-sapphire;
+                top: calc(100vh - 4rem);
+                top: calc(100dvh - 4rem);
+                right: calc(1rem - var(--body-right-inset, 0px));
+            }
+        </style> -->
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Get the button:
                 let mybutton: HTMLElement =
                     document.getElementById("scrolltotop")!;
+
+                // body is mx-auto and narrower than the viewport on wide
+                // screens, so its right edge isn't the viewport's right edge —
+                // measure the gap so the button can sit at the true screen edge.
+                function setEdgeInset() {
+                    const rect = document.body.getBoundingClientRect();
+                    document.documentElement.style.setProperty(
+                        "--body-right-inset",
+                        `${window.innerWidth - rect.right}px`,
+                    );
+                }
+                setEdgeInset();
+                window.addEventListener("resize", setEdgeInset);
 
                 // When the user scrolls down 20px from the top of the document, show the button
                 window.onscroll = function () {
@@ -114,28 +195,18 @@ const {
                         document.body.scrollTop > 20 ||
                         document.documentElement.scrollTop > 20
                     ) {
-                        mybutton.style.display = "block";
+                        mybutton.style.display = "flex";
                     } else {
                         mybutton.style.display = "none";
                     }
                 }
 
-                // When the user clicks on the button, scroll to the top of the document
+                // When the user clicks on the button, scroll to the top of the document.
+                // Native smooth scroll (not a manual rAF loop) so the browser
+                // cancels it automatically if the user scrolls during the animation.
                 mybutton.onclick = function () {
-                    topFunction();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                 };
-
-                function topFunction() {
-                    const currentScroll =
-                        document.documentElement.scrollTop ||
-                        document.body.scrollTop;
-
-                    if (currentScroll > 0) {
-                        // Smoothly scroll to the top
-                        window.requestAnimationFrame(topFunction);
-                        window.scrollTo(0, currentScroll - currentScroll / 8);
-                    }
-                }
             });
         </script>
     </body>

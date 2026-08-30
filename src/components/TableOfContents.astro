@@ -1,24 +1,76 @@
 ---
-import { buildTOC } from "@utils";
+import { buildTOC } from "@utils/toc";
+import type { TOCHeading } from "@utils/toc";
 import "@styles/base.css";
-import TableOfContentsHeading from "@components/TableOfContentsHeading.astro";
+import TocLevel from "@components/TocLevel.astro";
+
+export interface Props {
+    headings: TOCHeading[];
+}
 
 const { headings } = Astro.props;
 const toc = buildTOC(headings);
 ---
 
-<div class="mywidth:fixed mt-4">
+<div class="toc-sticky mt-4">
     <div class="ml-4">
-        <h3 class="text-base">Table of Contents</h3>
-        <ul class="leading-tight">
-            {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
-        </ul>
+        <h3 class="text-lg">Table of Contents</h3>
+        <TocLevel nodes={toc} prefix="" />
     </div>
 </div>
 
 <style>
     @reference "@styles/base.css";
+    .toc-sticky {
+        @apply mywidth:sticky;
+        top: calc(var(--header-height, 100px) + 1rem);
+    }
+
     h3 {
         @apply font-bold text-darker-rosewater;
     }
 </style>
+
+<script>
+    // Astro's ClientRouter swaps the page body on navigation without firing
+    // DOMContentLoaded — hook astro:page-load so both the toggle behavior and
+    // the heading clone re-run after every navigation, not just the first
+    // hard load. See docs/quirks.md.
+    function hydrateTocText(): void {
+        document.querySelectorAll<HTMLAnchorElement>("[data-toc-slug]").forEach((link) => {
+            const slug = link.dataset.tocSlug;
+            const heading = slug ? document.getElementById(slug) : null;
+            if (!heading) return;
+
+            const clone = heading.cloneNode(true) as HTMLElement;
+            clone.querySelectorAll(".heading-anchor").forEach((anchor) => anchor.remove());
+            link.innerHTML = clone.innerHTML;
+        });
+    }
+
+    // mirrors the `sm` breakpoint the CSS default collapse state is keyed
+    // on (TocLevel.astro) — reading computed style instead was unreliable
+    // mid-transition and, on a nested level, could read an ancestor
+    // panel's state. See docs/quirks.md.
+    const MOBILE_QUERY = "(max-width: 639.98px)";
+
+    function toggleLevel(level: HTMLElement): void {
+        const currentlyExpanded =
+            level.dataset.expanded === undefined
+                ? !window.matchMedia(MOBILE_QUERY).matches
+                : level.dataset.expanded === "true";
+        level.dataset.expanded = String(!currentlyExpanded);
+    }
+
+    function initToc(): void {
+        hydrateTocText();
+        document.querySelectorAll<HTMLButtonElement>(".toc-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const level = btn.closest<HTMLElement>(".toc-level");
+                if (level) toggleLevel(level);
+            });
+        });
+    }
+
+    document.addEventListener("astro:page-load", initToc);
+</script>

@@ -1,15 +1,16 @@
 ---
 import "@styles/base.css";
 import { SITE } from "@config";
-import Header from "@components/Header.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
 import GithubLink from "@components/GithubLink.astro";
 import type { MarkdownHeading } from "astro";
 import type { AITool } from "types";
 import aiTools from "@assets/aitools";
 import { renderInlineMarkdown, stripInlineMarkdown } from "@utils/inlineMarkdown";
+import type { TOCHeading } from "@utils/toc";
+import { mixCtpColor } from "@utils/colorMix";
 
 // Basically there may be cases where i would want the heading text to be something else in the toc
 // in that case, send the entire heading array manually from the frontmatter itself
@@ -28,6 +29,7 @@ export interface Props {
         headings?: { depth: number; slug: string; text: string }[];
         github?: string;
         ai_use?: AITool[];
+        seo_keywords?: string[];
     };
     headings: MarkdownHeading[];
     lastEdited?: Date | null;
@@ -38,30 +40,59 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
 };
 const { frontmatter, headings: propsheadings, lastEdited } = Astro.props;
-let headings: any[] = [];
+let headings: TOCHeading[] = [];
 if (frontmatter.headings && frontmatter.headings.length > 0) {
     headings = frontmatter.headings;
 } else {
     headings = propsheadings;
 }
 const date = new Date(frontmatter.date);
+const dimLavender = mixCtpColor("lavender", 65, "black");
 const editedDate =
     lastEdited != null && lastEdited.toDateString() !== date.toDateString() ? lastEdited : null;
+
+const postURL = new URL(Astro.url.pathname, Astro.site).href;
+const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: stripInlineMarkdown(frontmatter.title),
+    ...(frontmatter.subtitle && {
+        alternativeHeadline: stripInlineMarkdown(frontmatter.subtitle),
+    }),
+    description: frontmatter.description,
+    datePublished: date.toISOString(),
+    dateModified: (editedDate ?? date).toISOString(),
+    ...(frontmatter.seo_keywords && frontmatter.seo_keywords.length > 0 && { keywords: frontmatter.seo_keywords.join(", ") }),
+    author: {
+        "@type": "Person",
+        name: SITE.author,
+        url: SITE.website,
+    },
+    url: postURL,
+};
 ---
 
 <BaseLayout
     title={`${stripInlineMarkdown(frontmatter.title)} | ${SITE.title}`}
     description={frontmatter.description}
+    type="article"
+    publishedTime={date}
+    modifiedTime={editedDate}
+    seo_keywords={frontmatter.seo_keywords}
 >
-    <Header activeNav={frontmatter.activeNav} />
-    <Breadcrumbs shortTitle={frontmatter.shortTitle} />
+    <script
+        type="application/ld+json"
+        set:html={JSON.stringify(structuredData)}
+        slot="structured-data"
+    />
+    <SiteHeader activeNav={frontmatter.activeNav} shortTitle={frontmatter.shortTitle} />
     <main class="mywidth:grid">
         <div class="grid gap-4 sm:grid-cols-7">
             {/* Render TableOfContents or empty span based on headings */}
             <div class="sm:col-span-2">
                 {
                     headings.length > 0 ? (
-                        <div class="relative">
+                        <div class="relative h-full">
                             <TableOfContents headings={headings} />
                         </div>
                     ) : (
@@ -69,44 +100,40 @@ const editedDate =
                     )
                 }
             </div>
-
             <div class="sm:col-span-5">
                 <section id="about" class="prose mx-auto max-w-3xl px-4">
-                    <h1 class="my-8" set:html={renderInlineMarkdown(frontmatter.title)} />
+                    <!-- the main heading block starts here -->
+                    <!-- 
+                    first title, then subtitle, then dates, then github, and finally AI attribution 
+                    -->
+                    <h1 set:html={renderInlineMarkdown(frontmatter.title)} />
+                    <div class="post-meta">
                     {
                         frontmatter.subtitle && (
-                            <h5 set:html={renderInlineMarkdown(frontmatter.subtitle)} />
+                            <div class="font-bold mb-4 mt-4 text-lg" set:html={renderInlineMarkdown(frontmatter.subtitle)} />
                         )
                     }
-                    <div class="flex items-center">
-                        <h5>
-                            <span><span class="font-mono text-ctp-lavender">&nbsp;</span><time datetime={date.toISOString()}>
-                                {date.toLocaleDateString(undefined, dateOptions)}
-                            </time></span>
-                            {
-                                editedDate && (
-                                    <>
-                                        {" "}
-                                        <span class="not-italic">(</span>last edited on{" "}
-                                        <time datetime={editedDate.toISOString()}>{editedDate.toLocaleDateString(undefined, dateOptions)}</time><span class="not-italic">)</span>
-                                    </>
-                                )
-                            }
-                        </h5>
+                    {
+                        frontmatter.github && <GithubLink githubURL={frontmatter.github} />
+                    }
+                    <div class="mb-0 mt-0 text-ctp-subtext0">
+                        <span><span class="font-mono">&nbsp;</span> Published on <time datetime={date.toISOString()}>
+                            {date.toLocaleDateString(undefined, dateOptions)}
+                        </time></span>
                         {
-                            frontmatter.github && (
+                            editedDate && (
                                 <>
-                                    &nbsp;{" | "}&nbsp; {/* Separator */}
-                                    <GithubLink
-                                        githubURL={frontmatter.github}
-                                    />
+                                    <span class="font-mono">&middot;</span>{" "}
+                                    Last Updated on {" "}
+                                    <time datetime={editedDate.toISOString()}>{editedDate.toLocaleDateString(undefined, dateOptions)}</time>
                                 </>
                             )
                         }
                     </div>
+                    
                     {
                         frontmatter.ai_use && frontmatter.ai_use.length > 0 && (
-                            <p class="ai-use-notice mt-1 text-left text-base text-ctp-overlay0">
+                            <p class="ai-use-notice mt-0 text-left text-base text-ctp-subtext0">
                                 {frontmatter.ai_use.map((tool: AITool, i: number) => (
                                     <>
                                         {i > 0 && ", "}
@@ -120,6 +147,8 @@ const editedDate =
                             </p>
                         )
                     }
+                    </div>
+                    <!-- in slot, the markdown content is entered -->
                     <slot />
                 </section>
             </div>
@@ -130,20 +159,12 @@ const editedDate =
 <style>
     @reference "@styles/base.css";
     h5 {
-        @apply italic text-ctp-lavender;
+        @apply text-ctp-lavender text-base;
     }
 
-    .subtitle {
-        @apply text-base font-normal text-ctp-rosewater;
-    }
-
-    .subtitle :global(strong),
-    .subtitle :global(code) {
+    h5 :global(strong),
+    h5 :global(code) {
         color: inherit;
-    }
-
-    .not-italic {
-        @apply not-italic;
     }
 
     .ai-use-notice :global(svg) {

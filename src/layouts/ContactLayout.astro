@@ -1,8 +1,7 @@
 ---
 import "@styles/base.css";
 import { SITE } from "@config";
-import Header from "@components/Header.astro";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 export interface Props {
@@ -15,14 +14,13 @@ export interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout title={`${frontmatter.title} | ${SITE.title}`}>
-    <Header activeNav="contact" />
-    <Breadcrumbs />
+<BaseLayout title={`${frontmatter.title} | ${SITE.title}`} description={frontmatter.description}>
+    <SiteHeader activeNav="contact" />
     <main>
         <div>
             <div>
                 <section id="contact" class="prose mx-auto max-w-3xl px-4">
-                    <h1 class="my-[32px]">{frontmatter.title}</h1>
+                    <h1 class="my-8">{frontmatter.title}</h1>
                     <slot />
                 </section>
             </div>

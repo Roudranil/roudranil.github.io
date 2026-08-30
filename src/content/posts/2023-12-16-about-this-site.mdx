@@ -1,34 +1,86 @@
 ---
-title: "About this site"
-description: "What tools I used to build this site and how I built it"
+title: "About this website"
+subtitle: "A short look into how Claude helped me rejuvenate this dead website."
+description: "This page goes into details about how i built this website, and the entire timeline of its creation. I go into details about how it was first made with Hugo, and then ported to Astro, and then how i enlisted the help of coding agents to polish it."
 date: 2023-12-16T05:57:00.514Z
 draft: false
 activeNav: "posts"
 shortTitle: "about-this-site.md"
+seo_keywords:
+    - astro
+    - hugo
+    - claude code
+    - coding agents
+    - static site generator
+    - tailwind css
+    - katex
+    - rehype
+    - remark
+ai_use:
+    - claude
 ---
 
-## What did I make it with?
+## What is this about?
 
-So I am not a web developer by trade or by training. A large reason why setting up this static site was even possible was becuase of [Astro](https://astro.build/). I tried with some others before, and my previous site was built with [Hugo](https://gohugo.io/).
+### Hugo to Astro
 
-A few reasons for my switch to Astro:
+During my time at CMI, building personal portfolio websites was all the craze amongst then first year students. Taking inspiration from one of my [classmates](https://github.com/arghyadipchak), I got around to making a website for myself in [Hugo](https://gohugo.io/). This was in 2022. Not being a web dev by training meant I was stuck in a labyrinth of terminologies, frameworks, concepts, and programming languages that were completely alien to me. Stackoverflow and github issues were all that I had. Pressure of coursework meant I did not have enough time to invest on learning them or fixing issues. Eventually, in May 2023, I ended up [archiving my old website](https://github.com/Roudranil/old-website).
 
--   Much higher degree of customisability as offered by Hugo; one of the primary roadblocks I faced with Hugo was adding styles and modifying the content rendered by the markdown files. Using layouts in Astro and `typography` in tailwind greatly simplifies that.
--   Documentation - The Astro docs is one of the most detailed docs I have seen till date, and contained information on about every single problem I encountered.
+In December 2023, I started work on this website. The internet is full of posts of people migrating from Hugo to [Astro](https://astro.build/). So I thought, why not? A few reasons for my switch to Astro:
 
-## Integrations
+- Much higher degree of customisability as offered by Hugo; one of the primary roadblocks I faced with Hugo was adding styles and modifying the content rendered by the markdown files. Using layouts in Astro and `typography` in tailwind greatly simplifies that.
+- Documentation - The Astro docs is one of the most detailed docs I have seen till date, and contained information on about every single problem I encountered.
 
-The development experience wouldn't have been complete without integrations, including a CSS framework and other features that are markdown-centric.
+### Building a castle under water
 
-### TailwindCSS
+ChatGPT was released around the time I started work on the new website. Like all skeptical new users, I tried leaning on it to get this website up and running. It did help, unsurprisingly. But back then, even ChatGPT had its limits. Building this website was akin to building a castle underwater, the lack of knowledge simply dissolving all progress instantly.
 
-I opted for [Tailwind CSS](https://tailwindcss.com/) to streamline styling and ensure a consistent design throughout the site. Needless to say, the utility classes really made it easy to write and style with css.
+Eventually, I gave up trying to maintain it. After graduation, proessional engagements demanded 100% of my time, hence I never really got around to rebuilding my site.
 
-### Markdown and MDX
+### 2026 and the age of coding agents
 
-For content creation, I leveraged MDX along with remark-math and rehype-katex for mathematical expressions.
+Then 2026 rolled around and the age of the [Claude Codes](https://claude.com/claude-code) and the [Codexes](https://openai.com/codex/) and the [Pis](https://pi.dev/) and the [OpenCodes](https://opencode.ai/) were upon us. These agents bestowed great power upon us and with this great power, I had to take the great responsibility of fixing this website.
 
-## Colorscheme
+Hence, there I went and dumped $20 into a Claude Code subscription, and boy was I blown away. Claude is like that hyperactive, overenthusiastic and highly skilled junior dev who has not slept in a year. I let it loose on this repo and it did godforsaken things I could not comprehend for the love of my life. But here we are. The site is alive again, with broken stylesheets, animations, transitions all fixed and things looking coherent and the code even more alien.
 
-Choosing a colorscheme was a no brainer. I opted for the [Catppuccin mocha](https://github.com/catppuccin/catppuccin) colorscheme, ocassionally patching in colors (different shades using some online tools), and some colors from catppuccin latte.
+I will let Claude write a short technical treatise on the architecture of this page below (note the em-dashes). From this point onward, each page will have an AI use disclaimer at the top of the page.
 
+## Architecture
+
+### Integrations
+
+The site uses three Astro integrations:
+
+- `@astrojs/mdx` — lets pages mix Markdown with components.
+- `@astrojs/sitemap` — builds `sitemap.xml` at build time.
+- `@astrojs/partytown` — moves the Google Analytics script to a web worker. This keeps the main thread free of the analytics script.
+
+### Plugins
+
+The Markdown pipeline uses one remark plugin and five rehype plugins:
+
+- `remark-math` — finds math syntax in Markdown.
+- `rehype-slug` — adds an ID to each heading.
+- `rehype-autolink-headings` — adds a link icon after each heading, except `h1`.
+- `rehype-katex` — renders the math syntax as KaTeX output.
+- `rehype-expressive-code` — renders code blocks with syntax highlighting and a custom language-badge plugin.
+- `rehype-external-links` — opens external links in a new tab.
+
+### Frameworks and libraries
+
+- Astro 7 — renders the site as static HTML at build time.
+- Markdown and MDX — author the content.
+- Tailwind CSS 4, through the `@tailwindcss/vite` plugin — provides the utility classes.
+- Catppuccin Mocha, through `@catppuccin/tailwindcss` — provides the color tokens.
+- KaTeX — renders math. The stylesheet and fonts are self-hosted, not loaded from a CDN.
+- Shiki, bundled inside `rehype-expressive-code` — renders code syntax.
+
+### Technical designs
+
+- **Table of contents as a `tree` command.** The table of contents renders as the output of the Unix `tree` command. It clones the real heading markup into each entry, then wraps and collapses long branches at any heading depth.
+- **Git-derived footer.** The footer reads the current commit hash and branch name at build time, through `import.meta.env.PUBLIC_GIT_HASH` and `PUBLIC_GIT_BRANCH`. Each post footer also shows a last-edited date, read from the git history of the content file, not from frontmatter.
+- **Structured data and SEO.** The homepage carries `WebSite` and `Person` JSON-LD schema. Each post carries `BlogPosting` schema. Pages carry Open Graph and Twitter Card meta tags. An RSS feed and a `sitemap.xml` file list all published content.
+
+## Theming
+
+The site uses one color theme: Catppuccin Mocha. The site has no light mode. Tailwind 4 stores the theme tokens in `src/styles/base.css`, inside a `@theme` block. The tokens set the fonts, font sizes, and breakpoints. Two fonts render the text: Computer Modern for body text, and Victor Mono Nerd Font for code. Both fonts are self-hosted in `public/fonts/`; the site does not load fonts from a CDN.

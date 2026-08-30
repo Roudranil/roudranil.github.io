@@ -39,15 +39,85 @@
     --color-dark-sapphire: #1e9fd9;
     --color-darker-rosewater: #a6a3b1;
     --color-light-base: #404063;
-    --color-info-titletext: #0d455d;
-    --color-info-bg: #74c7ec;
-    --color-info-accent: #209fb5;
-    --color-alert-titletext: #600a22;
-    --color-alert-bg: #f38ba8;
-    --color-alert-accent: #d20f39;
-    --color-tip-titletext: #5c0e47;
-    --color-tip-bg: #ea76cb;
-    --color-tip-accent: #991776;
+    /* individually-accessible flavor palettes (mocha stays available unprefixed via ctp-*) */
+    --color-ctp-latte-rosewater: #dc8a78;
+    --color-ctp-latte-flamingo: #dd7878;
+    --color-ctp-latte-pink: #ea76cb;
+    --color-ctp-latte-mauve: #8839ef;
+    --color-ctp-latte-red: #d20f39;
+    --color-ctp-latte-maroon: #e64553;
+    --color-ctp-latte-peach: #fe640b;
+    --color-ctp-latte-yellow: #df8e1d;
+    --color-ctp-latte-green: #40a02b;
+    --color-ctp-latte-teal: #179299;
+    --color-ctp-latte-sky: #04a5e5;
+    --color-ctp-latte-sapphire: #209fb5;
+    --color-ctp-latte-blue: #1e66f5;
+    --color-ctp-latte-lavender: #7287fd;
+    --color-ctp-latte-text: #4c4f69;
+    --color-ctp-latte-subtext1: #5c5f77;
+    --color-ctp-latte-subtext0: #6c6f85;
+    --color-ctp-latte-overlay2: #7c7f93;
+    --color-ctp-latte-overlay1: #8c8fa1;
+    --color-ctp-latte-overlay0: #9ca0b0;
+    --color-ctp-latte-surface2: #acb0be;
+    --color-ctp-latte-surface1: #bcc0cc;
+    --color-ctp-latte-surface0: #ccd0da;
+    --color-ctp-latte-base: #eff1f5;
+    --color-ctp-latte-mantle: #e6e9ef;
+    --color-ctp-latte-crust: #dce0e8;
+    --color-ctp-frappe-rosewater: #f2d5cf;
+    --color-ctp-frappe-flamingo: #eebebe;
+    --color-ctp-frappe-pink: #f4b8e4;
+    --color-ctp-frappe-mauve: #ca9ee6;
+    --color-ctp-frappe-red: #e78284;
+    --color-ctp-frappe-maroon: #ea999c;
+    --color-ctp-frappe-peach: #ef9f76;
+    --color-ctp-frappe-yellow: #e5c890;
+    --color-ctp-frappe-green: #a6d189;
+    --color-ctp-frappe-teal: #81c8be;
+    --color-ctp-frappe-sky: #99d1db;
+    --color-ctp-frappe-sapphire: #85c1dc;
+    --color-ctp-frappe-blue: #8caaee;
+    --color-ctp-frappe-lavender: #babbf1;
+    --color-ctp-frappe-text: #c6d0f5;
+    --color-ctp-frappe-subtext1: #b5bfe2;
+    --color-ctp-frappe-subtext0: #a5adce;
+    --color-ctp-frappe-overlay2: #949cbb;
+    --color-ctp-frappe-overlay1: #838ba7;
+    --color-ctp-frappe-overlay0: #737994;
+    --color-ctp-frappe-surface2: #626880;
+    --color-ctp-frappe-surface1: #51576d;
+    --color-ctp-frappe-surface0: #414559;
+    --color-ctp-frappe-base: #303446;
+    --color-ctp-frappe-mantle: #292c3c;
+    --color-ctp-frappe-crust: #232634;
+    --color-ctp-macchiato-rosewater: #f4dbd6;
+    --color-ctp-macchiato-flamingo: #f0c6c6;
+    --color-ctp-macchiato-pink: #f5bde6;
+    --color-ctp-macchiato-mauve: #c6a0f6;
+    --color-ctp-macchiato-red: #ed8796;
+    --color-ctp-macchiato-maroon: #ee99a0;
+    --color-ctp-macchiato-peach: #f5a97f;
+    --color-ctp-macchiato-yellow: #eed49f;
+    --color-ctp-macchiato-green: #a6da95;
+    --color-ctp-macchiato-teal: #8bd5ca;
+    --color-ctp-macchiato-sky: #91d7e3;
+    --color-ctp-macchiato-sapphire: #7dc4e4;
+    --color-ctp-macchiato-blue: #8aadf4;
+    --color-ctp-macchiato-lavender: #b7bdf8;
+    --color-ctp-macchiato-text: #cad3f5;
+    --color-ctp-macchiato-subtext1: #b8c0e0;
+    --color-ctp-macchiato-subtext0: #a5adcb;
+    --color-ctp-macchiato-overlay2: #939ab7;
+    --color-ctp-macchiato-overlay1: #8087a2;
+    --color-ctp-macchiato-overlay0: #6e738d;
+    --color-ctp-macchiato-surface2: #5b6078;
+    --color-ctp-macchiato-surface1: #494d64;
+    --color-ctp-macchiato-surface0: #363a4f;
+    --color-ctp-macchiato-base: #24273a;
+    --color-ctp-macchiato-mantle: #1e2030;
+    --color-ctp-macchiato-crust: #181926;
 }
 
 @layer base {
@@ -69,7 +139,10 @@
     }
 
     .page-title {
-        @apply font-bold text-2xl text-ctp-rosewater my-8;
+        @apply font-extrabold mb-8;
+        font-size: var(--font-size-3xl);
+        color: var(--catppuccin-color-red);
+        margin-top: 1rem;
     }
 
     .prose {
@@ -122,6 +195,7 @@
 
     html {
         overflow-y: scroll;
+        scroll-behavior: smooth;
     }
 
     ::-webkit-scrollbar {
@@ -183,19 +257,84 @@
     --tw-prose-hr: var(--catppuccin-color-surface1);
 }
 
+/* Leading of the default paragraph line-height (1.5) at body text size —
+   the gap between two lines of body text, not the full line-height. */
+.prose :is(h1, h2, h3, h4, h5, h6) {
+    margin-bottom: calc(var(--font-size-base) * 0.5);
+}
+
+.prose th {
+    font-weight: bold;
+    font-size: var(--text-base);
+    color: var(--catppuccin-color-lavender);
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: calc(var(--header-height, 100px) + 0.5rem);
+}
+
 .prose h1 {
     font-size: var(--font-size-3xl);
-    color: var(--catppuccin-color-maroon);
+    color: var(--catppuccin-color-red);
+    /* matches TableOfContents.astro's mt-4 gap under the breadcrumb nav,
+       so h1 and the "Table of Contents" label line up across the grid */
+    margin-top: 1rem;
+    font-family: var(--font-serif);
 }
 
 .prose h2 {
     font-size: var(--font-size-2xl);
-    color: var(--color-dark-rosewater);
+    color: var(--catppuccin-color-maroon);
+    margin-top: 1em;
 }
 
 .prose h3 {
     font-size: var(--font-size-lg);
-    color: var(--catppuccin-color-rosewater);
+    color: var(--catppuccin-color-flamingo);
+    margin-top: 1em;
+}
+
+.prose h4 {
+    font-size: var(--font-size-base);
+    color: var(--catppuccin-color-green);
+    margin-top: 1em;
+}
+
+.prose h5 {
+    font-size: var(--font-size-base);
+    color: var(--catppuccin-color-blue);
+    margin-top: 1em;
+}
+
+.prose h6 {
+    font-size: var(--font-size-base);
+    color: var(--catppuccin-color-mauve);
+    margin-top: 1em;
+}
+
+.prose :is(h2, h3, h4, h5, h6) .heading-anchor {
+    color: inherit !important;
+    background-image: linear-gradient(currentColor, currentColor);
+    text-decoration: none;
+    opacity: 0;
+    margin-left: 0.15em;
+    transition: opacity 100ms ease-out;
+}
+
+.prose :is(h2, h3, h4, h5, h6):hover .heading-anchor {
+    opacity: 0.4;
+}
+
+.prose :is(h2, h3, h4, h5, h6) .heading-anchor:hover {
+    opacity: 0.7;
+}
+
+/* Typography only auto-generates the "heading + * { margin-top: 0 }"
+   double-margin fix for h1-h4, since it doesn't style h5/h6 at all.
+   Without this, the element after h5/h6 keeps its own default
+   margin-top on top of the heading's margin-bottom. */
+.prose :is(h5, h6) + * {
+    margin-top: 0;
 }
 
 .expressive-code .header {

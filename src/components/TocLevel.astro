@@ -1,0 +1,218 @@
+---
+// TocLevel.astro
+// Recursive: renders one sibling list of TOCNodes plus the trailing
+// Expand/Collapse toggle for that list. Collapsing "a level" (see
+// docs/aesthetic.md) is therefore symmetric at every depth, including the
+// h2 root — TableOfContents.astro calls this with the full toc array and an
+// empty prefix, so it gets a toggle exactly like any other level.
+//
+// The toggle keeps the level's indentation but is not a tree sibling: its
+// own connector renders as BLANK (invisible), and it never affects which
+// real heading gets buildTOC's LAST glyph — see docs/aesthetic.md.
+import type { TOCNode } from "@utils/toc";
+import { BLANK, WRAP_CONTINUATION_LINES, EXPAND_ICON, COLLAPSE_ICON } from "@utils/toc";
+import "@styles/base.css";
+
+export interface Props {
+    nodes: TOCNode[];
+    prefix: string;
+}
+
+const { nodes, prefix } = Astro.props;
+
+// single {expr} per glyph — writing {prefix}{connector} across two JSX
+// lines puts a stray whitespace text node between them, which breaks the
+// gutter's line box (see docs/quirks.md).
+const toggleGlyph = prefix + BLANK;
+
+/**
+ * Continuation lines drawn behind a wrapped heading — the node's own
+ * childPrefix repeated so the "│" columns keep running once the text wraps
+ * past one line. childPrefix already resolves to BLANK for a last sibling,
+ * so its own column terminates instead of drawing a dangling "│" below its
+ * corner. See docs/aesthetic.md for why this stays content-based, not CSS.
+ */
+function continuationFor(childPrefix: string): string {
+    return Array(WRAP_CONTINUATION_LINES).fill(childPrefix).join("\n");
+}
+---
+
+{
+    nodes.length > 0 && (
+        <div class="toc-level" data-toc-level>
+            <div class="toc-panel">
+                <ul>
+                    {nodes.map((node) => (
+                        <li>
+                            <div class="toc-row">
+                                {/* zero whitespace between these tags — .toc-gutter has white-space:
+                                    pre, so any newline/indent between children would be preserved as
+                                    its own visible blank line instead of collapsing. See docs/quirks.md. */}
+                                <span class="toc-gutter" aria-hidden="true"><span class="toc-glyph">{node.prefix + node.connector}</span><span class="toc-cont">{continuationFor(node.childPrefix)}</span></span>
+                                <a class="toc-link" href={`#${node.slug}`} data-toc-slug={node.slug}>{node.text}</a>
+                            </div>
+                            {node.subheadings.length > 0 && (
+                                <Astro.self nodes={node.subheadings} prefix={node.childPrefix} />
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <button type="button" class="toc-row toc-btn">
+                <span class="toc-gutter" aria-hidden="true"><span class="toc-glyph">{toggleGlyph}</span></span>
+                <span class="toc-lbl-expand">{`${EXPAND_ICON} Expand`}</span>
+                <span class="toc-lbl-collapse">{`${COLLAPSE_ICON} Collapse`}</span>
+            </button>
+        </div>
+    )
+}
+
+<style>
+    @reference "@styles/base.css";
+
+    ul,
+    li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    li {
+        word-wrap: break-word;
+    }
+
+    .toc-row {
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        align-items: start;
+        line-height: 1.3;
+    }
+
+    .toc-gutter {
+        /* must match .toc-link's font-size exactly — the grid row's track
+           height is the taller of the two columns' natural heights, and
+           .toc-cont's `top: 1lh` is relative to *this* element's own line
+           height. Any mismatch here throws off both the row height and the
+           glyph/text vertical alignment. See docs/quirks.md. */
+        @apply font-mono text-base text-darker-rosewater;
+        position: relative;
+        align-self: stretch;
+        overflow: hidden;
+        white-space: pre;
+        user-select: none;
+    }
+
+    /* in-flow — this is what gives the gutter (and so the row) its height.
+       .toc-cont is positioned out of flow so it never inflates it further,
+       see docs/quirks.md. */
+    .toc-glyph {
+        display: block;
+    }
+
+    .toc-cont {
+        display: block;
+        position: absolute;
+        /* 1lh flush against the clip boundary leaves room for a sub-pixel
+           anti-aliasing sliver of the first "│" to bleed through on
+           unwrapped rows — the +1px margin pushes it safely inside the
+           clipped region. See docs/quirks.md. */
+        top: calc(1lh + 1px);
+        left: 0;
+    }
+
+    .toc-link {
+        @apply text-base font-sans text-darker-rosewater;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+    }
+
+    .toc-link:focus,
+    .toc-link:visited {
+        @apply text-darker-rosewater;
+        text-decoration: none;
+    }
+
+    .toc-link:hover {
+        color: var(--color-dark-rosewater);
+        text-decoration: underline;
+    }
+
+    .toc-link :global(.katex) {
+        font-size: 1em;
+        line-height: inherit;
+    }
+
+    /* the panel is what collapses — the toggle row itself always stays visible */
+    .toc-panel {
+        display: grid;
+        grid-template-rows: 1fr;
+        overflow: hidden;
+        visibility: visible;
+        transition: grid-template-rows 220ms ease;
+    }
+
+    .toc-panel > ul {
+        min-height: 0;
+    }
+
+    /* child combinators everywhere below — a level toggle must only ever
+       affect its own panel/labels, never a nested level's. See
+       docs/quirks.md for the descendant-combinator bug this replaces. */
+    @media (max-width: 639.98px) {
+        .toc-level:not([data-expanded]) > .toc-panel {
+            grid-template-rows: 0fr;
+            visibility: hidden;
+        }
+    }
+
+    .toc-level[data-expanded="false"] > .toc-panel {
+        grid-template-rows: 0fr;
+        visibility: hidden;
+    }
+
+    .toc-level[data-expanded="true"] > .toc-panel {
+        grid-template-rows: 1fr;
+        visibility: visible;
+    }
+
+    .toc-btn {
+        @apply font-mono text-xs text-ctp-surface1;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .toc-lbl-collapse {
+        display: inline;
+    }
+
+    .toc-lbl-expand {
+        display: none;
+    }
+
+    @media (max-width: 639.98px) {
+        .toc-level:not([data-expanded]) > .toc-btn > .toc-lbl-collapse {
+            display: none;
+        }
+        .toc-level:not([data-expanded]) > .toc-btn > .toc-lbl-expand {
+            display: inline;
+        }
+    }
+
+    .toc-level[data-expanded="false"] > .toc-btn > .toc-lbl-collapse {
+        display: none;
+    }
+    .toc-level[data-expanded="false"] > .toc-btn > .toc-lbl-expand {
+        display: inline;
+    }
+    .toc-level[data-expanded="true"] > .toc-btn > .toc-lbl-collapse {
+        display: inline;
+    }
+    .toc-level[data-expanded="true"] > .toc-btn > .toc-lbl-expand {
+        display: none;
+    }
+</style>
