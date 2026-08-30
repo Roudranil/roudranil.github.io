@@ -27,7 +27,7 @@ export interface Props {
         headings?: { depth: number; slug: string; text: string }[];
         github?: string;
         ai_use?: AITool[];
-        tags?: string[];
+        seo_keywords?: string[];
     };
     headings: MarkdownHeading[];
     lastEdited?: Date | null;
@@ -59,7 +59,7 @@ const structuredData = {
     description: frontmatter.description,
     datePublished: date.toISOString(),
     dateModified: (editedDate ?? date).toISOString(),
-    ...(frontmatter.tags && frontmatter.tags.length > 0 && { keywords: frontmatter.tags.join(", ") }),
+    ...(frontmatter.seo_keywords && frontmatter.seo_keywords.length > 0 && { keywords: frontmatter.seo_keywords.join(", ") }),
     author: {
         "@type": "Person",
         name: SITE.author,
@@ -75,7 +75,7 @@ const structuredData = {
     type="article"
     publishedTime={date}
     modifiedTime={editedDate}
-    tags={frontmatter.tags}
+    seo_keywords={frontmatter.seo_keywords}
 >
     <script
         type="application/ld+json"
@@ -125,7 +125,7 @@ const structuredData = {
                     }
                     {
                         frontmatter.ai_use && frontmatter.ai_use.length > 0 && (
-                            <p class="ai-use-notice mt-1 text-left text-base text-ctp-overlay0">
+                            <p class="ai-use-notice mt-0 text-left text-base text-ctp-overlay0">
                                 {frontmatter.ai_use.map((tool: AITool, i: number) => (
                                     <>
                                         {i > 0 && ", "}
@@ -149,7 +149,7 @@ const structuredData = {
 <style>
     @reference "@styles/base.css";
     h5 {
-        @apply italic text-ctp-lavender;
+        @apply italic text-ctp-lavender text-base mb-0;
     }
 
     h5 :global(strong),
