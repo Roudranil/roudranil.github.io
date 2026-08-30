@@ -62,7 +62,7 @@ const { activeNav } = Astro.props;
 <style>
     @reference "@styles/base.css";
     .header-bar {
-        @apply mywidth:w-[1024px];
+        @apply mywidth:w-5xl;
     }
     /* Change 1024 to whatever max-w- value is */
 
@@ -80,7 +80,7 @@ const { activeNav } = Astro.props;
     }
 
     .cursor-blink {
-        @apply relative top-[6px] bg-ctp-overlay1 text-xl;
+        @apply relative top-1.5 bg-ctp-overlay1 text-xl;
 
         width: 8px; /* Set the width of the box */
         height: 24px; /* Set the height of the box */
@@ -123,10 +123,10 @@ const { activeNav } = Astro.props;
     }
 
     .nav-underline {
-        @apply bg-gradient-to-r from-ctp-rosewater from-10% to-dark-rosewater to-70% bg-[length:0%_2px] bg-left-bottom bg-no-repeat transition-all duration-75 ease-out hover:bg-[length:100%_2px] hover:text-dark-rosewater hover:no-underline;
+        @apply bg-linear-to-r from-ctp-rosewater from-10% to-dark-rosewater to-70% bg-size-[0%_2px] bg-bottom-left bg-no-repeat transition-all duration-75 ease-out hover:bg-size-[100%_2px] hover:text-dark-rosewater hover:no-underline;
     }
 
     svg {
-        @apply relative top-[6.5px] h-[24px] w-[24px] fill-ctp-green;
+        @apply relative top-[6.5px] h-6 w-6 fill-ctp-green;
     }
 </style>
