@@ -2,11 +2,25 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Header from "@components/Header.astro";
 import TextLink from "@components/TextLink.astro";
+import { SITE } from "@config";
 
 import "@styles/base.css";
+
+const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.title,
+    url: SITE.website,
+    description: SITE.desc,
+};
 ---
 
 <BaseLayout>
+    <script
+        type="application/ld+json"
+        set:html={JSON.stringify(structuredData)}
+        slot="structured-data"
+    />
     <Header activeNav="~" />
     <div class="title-div">
         <h1 class="text-ctp-rosewater">Hello everyone &#x1F44B</h1>
