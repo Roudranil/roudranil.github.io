@@ -11,6 +11,11 @@ export interface Props {
     author?: string;
     description?: string;
     canonicalURL?: string;
+    image?: string;
+    type?: "website" | "article";
+    publishedTime?: Date;
+    modifiedTime?: Date | null;
+    tags?: string[];
 }
 
 const {
@@ -18,7 +23,14 @@ const {
     author = SITE.author,
     description = SITE.desc,
     canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+    image = "/og-image.png",
+    type = "website",
+    publishedTime,
+    modifiedTime,
+    tags,
 } = Astro.props;
+
+const ogImageURL = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
@@ -39,6 +51,52 @@ const {
         <meta name="description" content={description} />
         <meta name="author" content={author} />
         <link rel="sitemap" href="/sitemap-index.xml" />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title={SITE.title}
+            href="/rss.xml"
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content={type} />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImageURL} />
+        <meta property="og:site_name" content={SITE.title} />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageURL} />
+
+        {
+            // article-specific open graph tags; only meaningful when type="article" (post pages)
+            type === "article" && publishedTime && (
+                <meta
+                    property="article:published_time"
+                    content={publishedTime.toISOString()}
+                />
+            )
+        }
+        {
+            type === "article" &&
+                modifiedTime &&
+                modifiedTime.toISOString() !== publishedTime?.toISOString() && (
+                    <meta
+                        property="article:modified_time"
+                        content={modifiedTime.toISOString()}
+                    />
+                )
+        }
+        {
+            type === "article" &&
+                tags?.map((tag) => <meta property="article:tag" content={tag} />)
+        }
+
+        <slot name="structured-data" />
         <!-- Pre load backup google fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
