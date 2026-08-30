@@ -144,15 +144,25 @@ const ogImageURL = new URL(image, Astro.site).href;
         <ClientRouter />
     </head>
     <body>
+        <div id="scrolltotop-wrap">
+            <button id="scrolltotop" title="Scroll to Top"
+                ><span class="font-mono">󰁝</span></button
+            >
+        </div>
         <slot />
-        <button onclick="topFunction()" id="scrolltotop" title="Scroll to Top"
-            >^</button
-        >
         <Footer />
         <style>
     @reference "@styles/base.css";
+            #scrolltotop-wrap {
+                position: sticky;
+                top: 0;
+                height: 0;
+            }
             #scrolltotop {
-                @apply fixed bottom-5 right-7 z-99 hidden h-16 cursor-pointer rounded-2xl border border-none bg-ctp-surface1 p-2 text-xl text-ctp-red opacity-75 outline-hidden transition duration-200 hover:bg-ctp-surface0 hover:text-ctp-sapphire sm:text-4xl;
+                @apply absolute z-99 h-12 w-12 flex items-center justify-center hidden leading-none cursor-pointer rounded-full border border-none bg-ctp-surface1 text-lg text-ctp-red opacity-75 outline-hidden transition duration-200 hover:bg-ctp-surface0 hover:text-ctp-sapphire;
+                top: calc(100vh - 4rem);
+                top: calc(100dvh - 4rem);
+                right: calc(1rem - var(--body-right-inset, 0px));
             }
         </style>
 
@@ -161,6 +171,19 @@ const ogImageURL = new URL(image, Astro.site).href;
                 // Get the button:
                 let mybutton: HTMLElement =
                     document.getElementById("scrolltotop")!;
+
+                // body is mx-auto and narrower than the viewport on wide
+                // screens, so its right edge isn't the viewport's right edge —
+                // measure the gap so the button can sit at the true screen edge.
+                function setEdgeInset() {
+                    const rect = document.body.getBoundingClientRect();
+                    document.documentElement.style.setProperty(
+                        "--body-right-inset",
+                        `${window.innerWidth - rect.right}px`,
+                    );
+                }
+                setEdgeInset();
+                window.addEventListener("resize", setEdgeInset);
 
                 // When the user scrolls down 20px from the top of the document, show the button
                 window.onscroll = function () {
@@ -172,28 +195,18 @@ const ogImageURL = new URL(image, Astro.site).href;
                         document.body.scrollTop > 20 ||
                         document.documentElement.scrollTop > 20
                     ) {
-                        mybutton.style.display = "block";
+                        mybutton.style.display = "flex";
                     } else {
                         mybutton.style.display = "none";
                     }
                 }
 
-                // When the user clicks on the button, scroll to the top of the document
+                // When the user clicks on the button, scroll to the top of the document.
+                // Native smooth scroll (not a manual rAF loop) so the browser
+                // cancels it automatically if the user scrolls during the animation.
                 mybutton.onclick = function () {
-                    topFunction();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                 };
-
-                function topFunction() {
-                    const currentScroll =
-                        document.documentElement.scrollTop ||
-                        document.body.scrollTop;
-
-                    if (currentScroll > 0) {
-                        // Smoothly scroll to the top
-                        window.requestAnimationFrame(topFunction);
-                        window.scrollTo(0, currentScroll - currentScroll / 8);
-                    }
-                }
             });
         </script>
     </body>

@@ -1,10 +1,9 @@
 ---
 import "@styles/base.css";
 import { SITE } from "@config";
-import Header from "@components/Header.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
 import GithubLink from "@components/GithubLink.astro";
 import type { MarkdownHeading } from "astro";
 import type { AITool } from "types";
@@ -83,15 +82,14 @@ const structuredData = {
         set:html={JSON.stringify(structuredData)}
         slot="structured-data"
     />
-    <Header activeNav={frontmatter.activeNav} />
-    <Breadcrumbs shortTitle={frontmatter.shortTitle} />
+    <SiteHeader activeNav={frontmatter.activeNav} shortTitle={frontmatter.shortTitle} />
     <main class="mywidth:grid">
         <div class="grid gap-4 sm:grid-cols-7">
             {/* Render TableOfContents or empty span based on headings */}
             <div class="sm:col-span-2">
                 {
                     headings.length > 0 ? (
-                        <div class="relative">
+                        <div class="relative h-full">
                             <TableOfContents headings={headings} />
                         </div>
                     ) : (

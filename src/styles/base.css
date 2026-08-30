@@ -265,6 +265,10 @@
     color: var(--catppuccin-color-lavender);
 }
 
+:is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: calc(var(--header-height, 100px) + 0.5rem);
+}
+
 .prose h1 {
     font-size: var(--font-size-3xl);
     color: var(--catppuccin-color-red);

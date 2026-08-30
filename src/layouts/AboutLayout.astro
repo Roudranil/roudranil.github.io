@@ -1,10 +1,9 @@
 ---
 import "@styles/base.css";
 import { SITE, SOCIALS } from "@config";
-import Header from "@components/Header.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export interface Props {
     frontmatter: {
@@ -30,8 +29,7 @@ const structuredData = {
         set:html={JSON.stringify(structuredData)}
         slot="structured-data"
     />
-    <Header activeNav="about" />
-    <Breadcrumbs />
+    <SiteHeader activeNav="about" />
     <main>
         <div class="sm:grid-cols-7 mywidth:grid">
             <div class="sm:relative sm:col-span-2">

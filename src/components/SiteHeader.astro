@@ -1,0 +1,39 @@
+---
+import Header from "@components/Header.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+export interface Props {
+    activeNav?: "~" | "about" | "projects" | "posts" | "contact";
+    shortTitle?: string;
+}
+const { activeNav, shortTitle } = Astro.props;
+---
+
+<div id="site-header" class="site-header">
+    <Header activeNav={activeNav} />
+    <Breadcrumbs shortTitle={shortTitle} />
+</div>
+
+<style>
+    @reference "@styles/base.css";
+    .site-header {
+        @apply sticky top-0 z-40 bg-ctp-base;
+    }
+    @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+        .site-header {
+            @apply bg-ctp-base/70 backdrop-blur-xl;
+        }
+    }
+</style>
+
+<script>
+    const header = document.getElementById("site-header");
+    const setHeaderHeight = () =>
+        document.documentElement.style.setProperty(
+            "--header-height",
+            `${header?.offsetHeight ?? 0}px`,
+        );
+    setHeaderHeight();
+    if (header) {
+        new ResizeObserver(setHeaderHeight).observe(header);
+    }
+</script>

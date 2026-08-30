@@ -7,7 +7,7 @@ const { headings } = Astro.props;
 const toc = buildTOC(headings);
 ---
 
-<div class="mywidth:fixed mt-4">
+<div class="toc-sticky mt-4">
     <div class="ml-4">
         <h3 class="text-base">Table of Contents</h3>
         <ul class="leading-tight">
@@ -18,6 +18,11 @@ const toc = buildTOC(headings);
 
 <style>
     @reference "@styles/base.css";
+    .toc-sticky {
+        @apply mywidth:sticky;
+        top: calc(var(--header-height, 100px) + 1rem);
+    }
+
     h3 {
         @apply font-bold text-darker-rosewater;
     }

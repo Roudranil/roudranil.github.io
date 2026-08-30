@@ -1,8 +1,7 @@
 ---
 import "@styles/base.css";
 import { SITE } from "@config";
-import Header from "@components/Header.astro";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 export interface Props {
@@ -16,8 +15,7 @@ const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout title={`${frontmatter.title} | ${SITE.title}`} description={frontmatter.description}>
-    <Header activeNav="contact" />
-    <Breadcrumbs />
+    <SiteHeader activeNav="contact" />
     <main>
         <div>
             <div>
