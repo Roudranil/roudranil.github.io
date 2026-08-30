@@ -90,23 +90,23 @@ function formatDate(date: Date): string {
     .listing {
         /* x = leading between two body-text lines, matches base.css's
            `.prose :is(h1..h6) { margin-bottom: ... }` rule */
-        --listing-gap-x: calc(var(--font-size-base) * 0.2);
+        --listing-gap-x: calc(var(--font-size-base) * 0.1);
         /* y, slightly greater than x — title→subtitle→date gaps */
-        --listing-gap-y: calc(var(--font-size-base) * 0.4);
-        --listing-entry-gap: 3rem;
-        --listing-group-gap: 3rem;
+        --listing-gap-y: calc(var(--font-size-base) * 0.2);
+        --listing-entry-gap: 2rem;
+        --listing-group-gap: 2rem;
 
         --listing-year-size: var(--font-size-base);
         --listing-year-color: var(--catppuccin-color-subtext0);
         --listing-rule-color: var(--catppuccin-color-surface1);
-        --listing-rule-alpha: 40%;
+        --listing-rule-alpha: 100%;
 
-        --listing-title-size: var(--font-size-xl);
+        --listing-title-size: var(--font-size-lg);
         --listing-title-color: var(--catppuccin-color-rosewater);
         --listing-title-hover-color: var(--catppuccin-color-sapphire);
         --listing-title-weight: 400;
 
-        --listing-subtitle-size: var(--font-size-base);
+        --listing-subtitle-size: var(--font-size-sm);
         --listing-subtitle-color: var(--catppuccin-color-text);
 
         --listing-meta-size: var(--font-size-sm);
@@ -138,7 +138,7 @@ function formatDate(date: Date): string {
         border: 0;
         border-top: 1px solid
             color-mix(in srgb, var(--listing-rule-color) var(--listing-rule-alpha), transparent);
-        margin: calc(var(--listing-gap-x) * 0.5) 0 calc(var(--listing-entry-gap) * 0.75) 0;
+        margin: calc(var(--listing-gap-x) * 0.3) 0 calc(var(--listing-entry-gap) * 0.6) 0;
     }
 
     .entry + .entry {
