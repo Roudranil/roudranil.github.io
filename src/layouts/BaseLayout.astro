@@ -15,7 +15,7 @@ export interface Props {
     type?: "website" | "article";
     publishedTime?: Date;
     modifiedTime?: Date | null;
-    tags?: string[];
+    seo_keywords?: string[];
 }
 
 const {
@@ -27,7 +27,7 @@ const {
     type = "website",
     publishedTime,
     modifiedTime,
-    tags,
+    seo_keywords,
 } = Astro.props;
 
 const ogImageURL = new URL(image, Astro.site).href;
@@ -93,7 +93,7 @@ const ogImageURL = new URL(image, Astro.site).href;
         }
         {
             type === "article" &&
-                tags?.map((tag) => <meta property="article:tag" content={tag} />)
+                seo_keywords ?.map((tag) => <meta property="article:tag" content={tag} />)
         }
 
         <slot name="structured-data" />
