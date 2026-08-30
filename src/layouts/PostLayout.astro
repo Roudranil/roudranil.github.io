@@ -9,6 +9,7 @@ import type { MarkdownHeading } from "astro";
 import type { AITool } from "types";
 import aiTools from "@assets/aitools";
 import { renderInlineMarkdown, stripInlineMarkdown } from "@utils/inlineMarkdown";
+import type { TOCHeading } from "@utils/toc";
 
 // Basically there may be cases where i would want the heading text to be something else in the toc
 // in that case, send the entire heading array manually from the frontmatter itself
@@ -38,7 +39,7 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
 };
 const { frontmatter, headings: propsheadings, lastEdited } = Astro.props;
-let headings: any[] = [];
+let headings: TOCHeading[] = [];
 if (frontmatter.headings && frontmatter.headings.length > 0) {
     headings = frontmatter.headings;
 } else {
@@ -97,9 +98,12 @@ const structuredData = {
                     )
                 }
             </div>
-
             <div class="sm:col-span-5">
                 <section id="about" class="prose mx-auto max-w-3xl px-4">
+                    <!-- the main heading block starts here -->
+                    <!-- 
+                    first title, then subtitle, then dates, then github, and finally AI attribution 
+                    -->
                     <h1 set:html={renderInlineMarkdown(frontmatter.title)} />
                     <div class="post-meta">
                     {
@@ -141,6 +145,7 @@ const structuredData = {
                         )
                     }
                     </div>
+                    <!-- in slot, the markdown content is entered -->
                     <slot />
                 </section>
             </div>

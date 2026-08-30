@@ -21,7 +21,7 @@
 │   ├── pages/           # file-based routing, incl. about.md/contact.md (plain pages)
 │   ├── plugins/         # expressive-code-language-badge.mjs — custom rehype-expressive-code plugin
 │   ├── styles/base.css  # Tailwind + theme + prose overrides
-│   ├── utils/utils.ts    # buildTOC (nests headings + computes tree(1)-style prefixes)
+│   ├── utils/toc.ts      # buildTOC (nests headings + computes tree(1)-style prefixes)
 │   ├── utils/git.ts      # commit hash/branch + per-file last-edited date, see docs/build-and-deploy.md
 │   ├── config.ts        # SITE, MENU, SOCIALS
 │   └── types.ts
@@ -42,10 +42,9 @@ Defined in `tsconfig.json:9-16`:
 | `@styles/*` | `src/styles/*` |
 | `@layouts/*` | `src/layouts/*` |
 | `@config` | `src/config.ts` (single file, no `/*`) |
-| `@utils` | `src/utils/utils.ts` (single file, no `/*`) |
 | `@utils/*` | `src/utils/*` |
 
-`@config` maps to one file, not a directory — `@config/anything` will not resolve. `@utils` keeps its single-file mapping (`import { buildTOC } from "@utils"`) alongside the `@utils/*` wildcard added for `src/utils/git.ts` (`import { getLastEditedDate } from "@utils/git"`) — both patterns are valid at once, they don't conflict.
+`@config` maps to one file, not a directory — `@config/anything` will not resolve. `@utils` has no bare mapping — every import goes through `@utils/*` (e.g. `import { buildTOC } from "@utils/toc"`, `import { getLastEditedDate } from "@utils/git"`).
 
 ## Layout composition
 
@@ -73,6 +72,6 @@ BaseLayout (html/head/body shell, analytics, ClientRouter, scroll-to-top)
 | `GithubLink.astro` | Pill-style GitHub link, rendered in `PostLayout` when `frontmatter.github` is set |
 | `Header.astro` | Top nav; reads `SITE`/`MENU` from `@config`; contains commented-out dead code (unused logo SVG, cursor-blink, alt underline) |
 | `Socials.astro` | Renders social icons from `SOCIALS` config filtered by `active` |
-| `TableOfContents.astro` | Wraps `buildTOC` output in a `<ul>`; see `docs/aesthetic.md` for the tree-authenticity intent |
-| `TableOfContentsHeading.astro` | Recursive TOC item, uses `<Astro.self>` for nesting; renders precomputed `tree`-style prefix/connector glyphs, see `docs/aesthetic.md` |
-| `TextLink.astro` | Generic styled `<a>` wrapper (color/underline/disabled props); used by `TableOfContentsHeading` |
+| `TableOfContents.astro` | Entry point: runs `buildTOC`, renders the root `TocLevel`, owns the heading-clone + toggle-click script (`astro:page-load`) |
+| `TocLevel.astro` | Recursive: one sibling list of headings plus its trailing Expand/Collapse toggle row, uses `<Astro.self>` for nesting; see `docs/aesthetic.md` for the tree-authenticity and collapsing intent |
+| `TextLink.astro` | Generic styled `<a>` wrapper (color/underline/disabled props); no longer used by the ToC — kept for other callers |
